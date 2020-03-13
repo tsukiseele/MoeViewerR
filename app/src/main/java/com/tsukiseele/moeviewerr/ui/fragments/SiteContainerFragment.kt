@@ -62,7 +62,7 @@ class SiteContainerFragment : BaseFragment {
                 setOnQueryTextListener(object : OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String): Boolean {
                         try {
-                            (currentFragment as GalleryFragment).loadResource(query, true)
+                            (currentFragment as GalleryFragment).search(query)
                             searchView!!.closeSearch()
                         } catch (e: Exception) {
                             Toasty.info(context!!, "该站点不支持搜索").show()

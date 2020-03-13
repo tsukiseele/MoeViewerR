@@ -1,6 +1,5 @@
 package com.tsukiseele.moeviewerr.ui.fragments
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -17,6 +16,7 @@ import androidx.core.view.children
 import com.bumptech.glide.Glide
 import com.tsukiseele.moeviewerr.R
 import com.tsukiseele.moeviewerr.app.App
+import com.tsukiseele.moeviewerr.app.Config
 import com.tsukiseele.moeviewerr.model.Image
 import com.tsukiseele.moeviewerr.dataholder.GlobalObjectHolder
 import com.tsukiseele.moeviewerr.dataholder.FavoritesHolder
@@ -36,8 +36,8 @@ import com.tsukiseele.moeviewerr.ui.adapter.ImageStaggeredAdapter
 import com.tsukiseele.moeviewerr.ui.fragments.abst.SitePagerFragment
 import com.tsukiseele.moeviewerr.utils.*
 import com.tsukiseele.sakurawler.Sakurawler
-import com.tsukiseele.sakurawler.core.BaseCrawler
 import com.tsukiseele.sakurawler.model.Site
+import java.io.File
 import java.net.SocketTimeoutException
 
 class GalleryFragment : SitePagerFragment {
@@ -47,7 +47,6 @@ class GalleryFragment : SitePagerFragment {
     override val layoutId: Int
         get() = R.layout.fragment_image_gallery
 
-    private var mContext: Context? = null
     private var mHandler: Handler? = null
 
     private var mRecyclerView: RecyclerView? = null
@@ -55,7 +54,8 @@ class GalleryFragment : SitePagerFragment {
     private var mSwipeRefreshLayout: SwipeRefreshLayout? = null
 
     private val mImages = ArrayList<Image>()
-    private var mListLoader: ListLoader? = null
+    private var mGalleryLoader: GalleryLoader? = null
+    private var mSakurawler: Sakurawler? = null
     private var mSite: Site? = null
     // 瀑布流列数
     private var mListColumn = 3
@@ -63,104 +63,77 @@ class GalleryFragment : SitePagerFragment {
     private var mPageCode = DEFAULT_PAGECODE
     private var mKeywords = DEFAULT_KEYWORDS
 
-    // 列表滚动监听
-    private val onScrollListener = object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            super.onScrolled(recyclerView, dx, dy)
-            if (Util.isSlideToBottom(recyclerView)) {
-                loadResource(mKeywords)
-            }
-        }
-    }
-
     constructor()
 
-    constructor(site: Site) {
-        this.mSite = site
-    }
-
-    constructor(site: Site, keywords: String) {
+    constructor(site: Site, keywords: String = DEFAULT_KEYWORDS, pageCode: Int = DEFAULT_PAGECODE) {
         this.mSite = site
         this.mKeywords = keywords
+        this.mPageCode = pageCode
     }
 
     override fun onDisplay() {
-        // 如果没有任何数据，则请求新的数据
-        if (mImages.isEmpty()) {
-            loadResource(mKeywords)
-        }
+        // 如果没有任何图片，则加载新的图片
+        if (mImages.isEmpty()) loadGallery()
     }
 
     override fun onHide() {
 
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable("site", mSite)
+        outState.putString("keywords", mKeywords)
+        outState.putInt("page_code", mPageCode)
+    }
+
     override fun onCreateView(container: View, savedInstanceState: Bundle?) {
+        savedInstanceState?.also {
+            mSite = savedInstanceState.getSerializable("site") as? Site
+            mKeywords = savedInstanceState.getString("keywords") ?: DEFAULT_KEYWORDS
+            mPageCode = savedInstanceState.getInt("page_code")
+        }
+        mSakurawler = Sakurawler(mSite!!)
+
         mSwipeRefreshLayout =
             container.findViewById<View>(R.id.listImageListFragment_SwipeRefreshLayout) as SwipeRefreshLayout
         mRecyclerView =
             container.findViewById<View>(R.id.listImageListFragment_RecyclerView) as RecyclerView
-        mContext = getContext()
-
         // 初始化列表
-        //mRecyclerView.addItemDecoration(new RecyclerViewDivider(mContext, 0));
         when (PreferenceHolder.getInt(PreferenceHolder.KEY_LISTTYPE, TYPE_FLOW_3_COL)) {
             TYPE_FLOW_2_COL -> {
                 mListColumn = 2
                 mRecyclerView?.layoutManager =
                     StaggeredGridLayoutManager(mListColumn, StaggeredGridLayoutManager.VERTICAL)
-                mAdapter = mContext?.let {
-                    ImageStaggeredAdapter(
-                        it,
-                        mImages,
-                        mListColumn
-                    )
-                }
+                mAdapter = ImageStaggeredAdapter(context!!, mImages, mListColumn)
             }
             TYPE_FLOW_3_COL -> {
                 mListColumn = 3
                 mRecyclerView?.layoutManager =
                     StaggeredGridLayoutManager(mListColumn, StaggeredGridLayoutManager.VERTICAL)
-                mAdapter = mContext?.let {
-                    ImageStaggeredAdapter(
-                        it,
-                        mImages,
-                        mListColumn
-                    )
-                }
+                mAdapter = ImageStaggeredAdapter(context!!, mImages, mListColumn)
             }
             TYPE_GRID_3_COL -> {
                 mListColumn = 3
-                mRecyclerView?.layoutManager = GridLayoutManager(mContext, mListColumn)
-                mAdapter = mContext?.let {
-                    ImageGridAdapter(
-                        it,
-                        mImages
-                    )
-                }
-            }
-            else -> {
-                mListColumn = 3
-                mRecyclerView?.layoutManager =
-                    StaggeredGridLayoutManager(mListColumn, StaggeredGridLayoutManager.VERTICAL)
-                mAdapter = mContext?.let {
-                    ImageStaggeredAdapter(
-                        it,
-                        mImages,
-                        mListColumn
-                    )
-                }
+                mRecyclerView?.layoutManager = GridLayoutManager(context, mListColumn)
+                mAdapter = ImageGridAdapter(context!!, mImages)
             }
         }
         mRecyclerView?.adapter = mAdapter
-        mRecyclerView?.addOnScrollListener(onScrollListener)
         mRecyclerView?.isScrollbarFadingEnabled = true
+        mRecyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (Util.isSlideToBottom(recyclerView))
+                    loadGallery()
+            }
+        })
         mAdapter?.setOnItemClickListener(object : CustiomItemClickListener() {
             override fun onItemSingleClick(view: View, position: Int) {
                 val image = mImages[position]
                 if (image.hasCatalog()) {
                     GlobalObjectHolder.put("image_catalog", mImages[position])
-                    val intent = Intent(mContext, CatalogActivity::class.java)
+                    val intent = Intent(context, CatalogActivity::class.java)
                     val imageView: ImageView? =
                         when (PreferenceHolder.getInt(PreferenceHolder.KEY_LISTTYPE, -1)) {
                             TYPE_FLOW_2_COL,
@@ -172,11 +145,11 @@ class GalleryFragment : SitePagerFragment {
                         }
                     imageView?.also {
                         ActivityUtil.startActivityOfSceneTransition(activity!!, it, intent)
-                } ?: activity?.startActivityOfFadeAnimation(intent)
+                    } ?: activity?.startActivityOfFadeAnimation(intent)
                 } else {
                     GlobalObjectHolder.put("images", mImages)
                     GlobalObjectHolder.put("images_index", position)
-                    val intent = Intent(mContext, ImageViewerActivity::class.java)
+                    val intent = Intent(context, ImageViewerActivity::class.java)
                     activity?.startActivityOfFadeAnimation(intent)
                 }
             }
@@ -184,8 +157,8 @@ class GalleryFragment : SitePagerFragment {
         mAdapter?.setOnLongItemClickListener(object : BaseAdapter.OnLongItemClickListener {
             override fun onLongItemClick(view: View, position: Int) {
                 val image = mImages[position]
-                image.apply {
-                    FavoritesHolder.add(this)
+                image.also {
+                    FavoritesHolder.add(it)
                     FavoritesHolder.saveState()
                     Toasty.success(context!!, "已收藏").show()
                 }
@@ -205,42 +178,36 @@ class GalleryFragment : SitePagerFragment {
                         }
                     })*/
             }
-
         })
         // 初始化下拉视图
         mSwipeRefreshLayout?.setColorSchemeResources(*App.swipeRefreshColors!!)
         mSwipeRefreshLayout?.setProgressViewOffset(true, -100, 50)
-        mSwipeRefreshLayout?.setOnRefreshListener { loadResource(mKeywords) }
+        mSwipeRefreshLayout?.setOnRefreshListener { loadGallery() }
 
         mHandler = Handler { msg ->
-            mListLoader = null
+            mGalleryLoader = null
             // 隐藏顶部进度条
             mSwipeRefreshLayout?.let { if (it.isRefreshing) it.isRefreshing = false }
             // 执行操作
             when (msg.what) {
                 STATE_OK -> {
-                    if (msg.obj == null && view != null)
-                        Snackbar.make(view!!, "获取数据为空", Snackbar.LENGTH_SHORT).show()
-
+                    msg.obj ?: Toasty.error(context!!,"空数据", Snackbar.LENGTH_SHORT).show()
                     if (msg.obj is List<*>) {
-                        val infoList = msg.obj as List<Image>
-                        if (infoList.size > 0)
-                            mAdapter?.addAll(infoList)
-                        else
-                            Toasty.info(App.context, "已经到底了").show()
+                        val images = msg.obj as List<Image>
+                        if (images.isNotEmpty()) {
+                            mAdapter?.addAll(images)
+                        } else {
+                            Toasty.info(App.context, "没有更多了").show()
+                        }
                     }
                     mPageCode++
                 }
-
                 STATE_ERROR -> {
                     val e = msg.obj as Exception
-                    val exceptionMsg: String = if (e is SocketTimeoutException) {
-                        "加载超时：${mSite?.title}"
-                    } else {
-                        "加载失败：${mSite?.title}"
-                    }
-                    Log.e(GalleryFragment::class.java.name, e.message ?: "")
-
+                    val exceptionMsg: String = if (e is SocketTimeoutException)
+                        "超时：${mSite?.title}"
+                    else
+                        "失败：${mSite?.title}"
                     Toasty.error(App.context, exceptionMsg).show()
                 }
             }
@@ -248,70 +215,74 @@ class GalleryFragment : SitePagerFragment {
         }
     }
 
+    // 搜索
+    fun search(keywords: String, pageCode: Int = DEFAULT_PAGECODE) {
+        // 与上次搜索的内容不同才进行搜索
+        if (keywords != this.mKeywords) {
+            // 取消上次所有预览图的加载
+            try {
+                val glide = Glide.with(context!!)
+                mRecyclerView?.children?.forEach { glide.clear(it) }
+                mAdapter?.clear()
+            } catch (e: Exception) {}
+            // 重置页码和关键字
+            mPageCode = pageCode
+            mKeywords = keywords
+            loadGallery()
+        }
+    }
+
+    /**
+     * 加载画廊，每次执行自动加载下一页
+     */
+    fun loadGallery() {
+        loadPage(mKeywords, mPageCode)
+    }
+
     /**
      * 判断网络并加载资源
+     * @param pageCode 页码
      * @param keywords 关键字
-     * @param isRefresh 是否刷新链接
      */
-    fun loadResource(keywords: String, isRefresh: Boolean = false) {
-        if (App.isNetworkConnected(mContext)) {
-            loadList(mPageCode, keywords, isRefresh)
+    private fun loadPage(keywords: String, pageCode: Int) {
+        if (App.isNetworkConnected(context)) {
+            load(keywords, pageCode)
         } else {
             Toasty.warning(App.context, "请检查网络连接").show()
         }
     }
 
-    fun loadList(pageCode: Int, keywords: String, isRefresh: Boolean) {
-        var page = pageCode
-        if (mListLoader != null && isRefresh) {
-            mListLoader!!.interrupt()
-            mListLoader = null
+    /**
+     * 加载资源
+     * @param pageCode 页码
+     * @param keywords 关键字
+     */
+    private fun load(keywords: String, pageCode: Int) {
+        // 弹出加载视图
+        mSwipeRefreshLayout?.also {
+            if (!it.isRefreshing) it.isRefreshing = true
         }
-        if (mListLoader == null) {
-            // 判断与之前搜索的内容是否属于同一内容
-            if (this.mKeywords != keywords) {
-                // 取消所有请求
-                val glide = Glide.with(context!!)
-                mRecyclerView?.children?.forEach {
-                    glide.clear(it)
-                }
-                // 重置页码，设置新的关键字，清空列表
-                page =
-                    DEFAULT_PAGECODE
-                this.mKeywords = keywords
-                mAdapter?.clear()
-            }
-
-            if (!mSwipeRefreshLayout!!.isRefreshing)
-                mSwipeRefreshLayout!!.isRefreshing = true
-            // 取消图片流加载
-            mListLoader = ListLoader(
-                mHandler,
-                mSite!!,
-                page,
-                keywords,
-                ""
-            )
-            mListLoader!!.start()
-        }
+        // 如果上次请求未完成，则取消该请求
+        mGalleryLoader?.interrupt()
+        // 开始加载资源
+        mGalleryLoader = GalleryLoader(mSakurawler!!, mHandler, keywords, pageCode)
+            .also { it.start() }
     }
 
     // 退出时销毁资源
     override fun onDestroyView() {
-        if (mListLoader != null) {
-            mListLoader!!.interrupt()
-            mListLoader = null
-        }
+        mGalleryLoader?.also { it.interrupt() }
+        mGalleryLoader = null
         mHandler = null
         super.onDestroyView()
     }
 
-    class ListLoader(
+    // 画廊加载器
+    class GalleryLoader(
+        private val sakurawler: Sakurawler,
         private var handler: Handler?,
-        private val site: Site,
-        private val pageCode: Int,
         private val keywords: String,
-        private val extraKeys: String
+        private val pageCode: Int
     ) : Thread() {
 
         override fun interrupt() {
@@ -323,34 +294,17 @@ class GalleryFragment : SitePagerFragment {
             return super.isInterrupted() || handler == null
         }
 
-        private fun checkInterrupted() {
-
-        }
-
         override fun run() {
-
-            val crawler = Sakurawler(site)
-            val mode = BaseCrawler.Mode()
-            mode.type = if (keywords.isBlank()) BaseCrawler.MODE_HOME else BaseCrawler.MODE_SEARCH
-            mode.pageCode = pageCode
-            mode.keywords = keywords
-            mode.extraKey = extraKeys
-            crawler.mode(mode)
-            val imageParser = crawler.parseOf(Image::class.java)
+            sakurawler.pagecode(pageCode).keywords(keywords)
+            val imageParser = sakurawler.parseOf(Image::class.java)
             if (isInterrupted) return
             try {
                 val obj = imageParser.parseGallery()
                 if (isInterrupted) return
-                Message.obtain(
-                    handler,
-                    STATE_OK, obj
-                ).sendToTarget()
+                Message.obtain(handler, STATE_OK, obj).sendToTarget()
             } catch (e: Exception) {
                 if (isInterrupted) return
-                Message.obtain(
-                    handler,
-                    STATE_ERROR, e
-                ).sendToTarget()
+                Message.obtain(handler, STATE_ERROR, e).sendToTarget()
             }
         }
     }
@@ -363,6 +317,3 @@ class GalleryFragment : SitePagerFragment {
         val DEFAULT_KEYWORDS = ""
     }
 }
-/**
- * 判断网络并加载资源
- */
