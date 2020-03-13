@@ -1,17 +1,17 @@
 # MoeViewerR
 
-插件式的漫画阅读应用，支持Exhentai，以及Yande，SankakuComplex等几乎所有Booru图库
+插件式的漫画阅读应用，支持Exhentai，以及Yande，SankakuComplex等绝大多数Booru图库
 
 ## Requirement
-Android 5.1 (SDK 21) 或更高版本
+Android 5.1 (SDK 22) 或更高版本
 
 ## Usage
 1. 安装
 
 2. 添加订阅
-```
-https://raw.githubusercontent.com/tsukiseele/MoeViewerR/master/packs/default_package.zip
-```
+
+- `https://raw.githubusercontent.com/tsukiseele/MoeViewerR/master/packs/default_package.zip`
+
 3. 食用
 
 ## License
