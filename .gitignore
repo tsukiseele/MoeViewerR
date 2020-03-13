@@ -1,7 +1,7 @@
+/.gradle/
+/.idea/
+/app/.idea/
+/app/build/
 *.iml
-.gradle
-.idea
+local.properties
 .DS_Store
-.externalNativeBuild
-.cxx
-.idea/codeStyles/codeStyleConfig.xml
