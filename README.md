@@ -1,0 +1,2 @@
+# MoeViewerR
+插件式的漫画阅读应用，支持Exhentai，以及Yande，SankakuComplex等几乎所有Booru图库
