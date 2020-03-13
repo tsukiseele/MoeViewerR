@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="180dp"
+	android:orientation="vertical"
+	android:background="@color/primary">
+
+	<ImageView
+		android:layout_height="match_parent"
+		android:layout_width="match_parent"
+		android:src="@drawable/bg_decorate"
+		android:scaleType="centerCrop"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="谨以此献给所有二次元的爱好者们\n愿都能拥有属于自己的一片天空"
+		android:layout_alignParentBottom="true"
+		android:layout_margin="10dp"
+		android:textColor="#FDFDFD"
+		android:textSize="14sp"/>
+
+</RelativeLayout>
+

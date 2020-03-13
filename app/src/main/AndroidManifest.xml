@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.tsukiseele.moeviewerr">
+    <!-- 往sdcard中写入数据的权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 网络访问权限 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 网络状态访问权限 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name=".app.App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:persistent="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:theme="@style/NoActionBarLightTheme"
+        android:usesCleartextTraffic="true"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".ui.activitys.abst.BaseActivity"></activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".LaunchActivity"
+            android:label="@string/app_name"
+            android:theme="@style/NoActionBarLightTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.activitys.CatalogActivity" />
+        <activity android:name=".ui.activitys.ImageViewerActivity" />
+        <activity android:name=".ui.activitys.SettingsActivity" />
+        <activity android:name=".ui.activitys.AboutActivity" />
+        <activity android:name=".ui.activitys.GalleryActivity" />
+
+        <service android:name=".ui.service.DownloadService" />
+    </application>
+
+</manifest>

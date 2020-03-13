@@ -1,0 +1,27 @@
+关于 MoeViewer-Beta 
+·一个插件式的图片浏览工具
+·插件请用户自行寻找，开发者不提供任何插件来源
+·Connection reset(连接已重置)一般是自身的网络问题，可能需要科学上网
+
+开发者
+·TsukiSeele - 一只来自二次元，控兽耳萝莉的野生开发者，欢迎大家和我一起交♂易哦
+
+反馈邮箱
+·tsukiseele@hotmail.com
+·tsukiseele@gmail.com
+
+引入的开源项目
+·Android
+·Jsoup
+·Glide
+·DiskLruCache
+·PinchImageView
+·MaterialSearchView
+·TagCloudView
+
+致谢
+·感谢H-Viewer给我的启发
+
+版权
+·你可以逆向修改APP供自己使用或学习，但禁止在未经作者允许的情况下发布，禁止私自用于商业用途，感谢合作。
+·未来会在Github开放源代码，才不是因为现在的代码写的太烂呢。。。

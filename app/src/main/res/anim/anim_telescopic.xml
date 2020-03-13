@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+	<!--alpha
+        android:duration="250"
+		android:fillAfter="false"
+        android:fromAlpha="0.5"
+        android:toAlpha="1.0" /-->
+	<scale
+        android:duration="4000"
+        android:fillAfter="false"
+        android:fromXScale="1.0"
+        android:fromYScale="1.0"
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+        android:pivotX="33%"
+        android:pivotY="33%"
+        android:toXScale="1.5"
+        android:toYScale="1.5" />
+	
+	<translate
+		android:startOffset="4000"
+		android:duration="4000"
+		android:fillAfter="false"
+		android:fromXDelta="0%p"
+		android:fromYDelta="0%p"
+		android:toXDelta="-33%p"
+		android:toYDelta="0%p" />
+	
+	<translate
+		android:startOffset="8000"
+		android:duration="4000"
+		android:fillAfter="false"
+		android:fromXDelta="0%p"
+		android:fromYDelta="0%p"
+		android:toXDelta="0%p"
+		android:toYDelta="-33%p" />
+
+	<translate
+		android:startOffset="12000"
+		android:duration="4000"
+		android:fillAfter="false"
+		android:fromXDelta="0%p"
+		android:fromYDelta="0%p"
+		android:toXDelta="33%p"
+		android:toYDelta="0%p" />
+	
+	<translate
+		android:startOffset="16000"
+		android:duration="4000"
+		android:fillAfter="false"
+		android:fromXDelta="0%p"
+		android:fromYDelta="0%p"
+		android:toXDelta="0%p"
+		android:toYDelta="33%p" />
+	
+	<scale
+		android:startOffset="20000"
+        android:duration="4000"
+        android:fillAfter="false"
+        android:fromXScale="1.0"
+        android:fromYScale="1.0"
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+        android:pivotX="33%"
+        android:pivotY="33%"
+        android:toXScale="0.67"
+        android:toYScale="0.67" />
+	
+	<!--alpha
+		android:startOffset="23750"
+        android:duration="250"
+		android:fillAfter="false"
+        android:fromAlpha="1.0"
+        android:toAlpha="0.5" /-->
+</set>

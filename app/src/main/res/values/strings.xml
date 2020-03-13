@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MoeViewerR</string>
+    <string name="text_subscribe_name">订阅名</string>
+    <string name="text_subscribe_url">订阅源</string>
+    <string name="image_notag">该图片无标签</string>
+    <string name="scene_transition">scene_transition</string>
+    <string name="text_download">下载</string>
+</resources>

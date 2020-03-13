@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	
+	<PreferenceCategory android:title="关于">
+
+		<Preference
+			android:key="onDeveloper"
+			android:title="开发者"
+			android:singleLine="true"
+			android:summary="TsukiSeele"/>
+
+		<Preference
+			android:key="onDonation"
+			android:title="捐赠"
+			android:singleLine="true"
+			android:summary="也许你会送给开发者一杯咖啡"/>
+		
+		<Preference
+			android:key="onProject"
+			android:title="项目"
+			android:summary="获取本项目的相关内容"/>
+		
+		<Preference
+			android:key="onOpenSource"
+			android:title="开源"
+			android:summary="感谢所有为开源项目做出贡献的开发者"/>
+
+		<Preference
+			android:key="onCopyright"
+			android:title="版权"
+			android:singleLine="true"
+			android:summary="© 2020 TsukiSeele Productions. All rights reserved"/>
+	</PreferenceCategory>
+	
+</PreferenceScreen>
+

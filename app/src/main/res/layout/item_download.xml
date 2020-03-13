@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:layout_margin="3dp"
+	android:foreground="?android:attr/selectableItemBackground"
+	android:stateListAnimator="@drawable/lift_on_touch"
+	app:cardBackgroundColor="@color/white"
+	app:cardCornerRadius="1dp">
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical">
+
+		<ImageView
+			android:layout_height="80dp"
+			android:layout_width="50dp"
+			android:id="@+id/itemListDownloadLayout_ImageView"
+			android:layout_margin="3dp"
+			android:layout_centerVertical="true"/>
+
+		<TextView
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:layout_toEndOf="@id/itemListDownloadLayout_ImageView"
+			android:layout_margin="5dp"
+			android:id="@+id/itemListDownloadLayoutTitle_TextView"
+			android:maxLines="1"
+			android:textSize="16sp"
+			android:textColor="@color/black"/>
+
+		<ProgressBar
+			style="?android:attr/progressBarStyleHorizontal"
+			android:layout_height="wrap_content"
+			android:layout_width="match_parent"
+			android:layout_below="@id/itemListDownloadLayoutTitle_TextView"
+			android:layout_alignStart="@id/itemListDownloadLayoutTitle_TextView"
+			android:id="@+id/itemListDownloadLayout_ProgressBar"
+			android:layout_margin="5dp"/>
+
+		<TextView
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:layout_below="@id/itemListDownloadLayout_ProgressBar"
+			android:layout_alignEnd="@id/itemListDownloadLayout_ProgressBar"
+			android:layout_margin="5dp"
+			android:id="@+id/itemListDownloadLayoutProgress_TextView"
+			android:maxLines="1"/>
+
+	</RelativeLayout>
+
+</androidx.cardview.widget.CardView>
+

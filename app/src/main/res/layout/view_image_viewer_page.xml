@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/black">
+
+	<com.tsukiseele.moeviewerr.ui.view.RoundProgressBar
+		xmlns:round="http://schemas.android.com/apk/res-auto"
+		android:layout_width="128dp"
+		android:layout_height="128dp"
+		android:id="@+id/pageImageViewerLayout_RoundProgressBar"
+		round:radius="40dp"
+		round:ringWidth="10dp"
+		round:startAngle="-90"
+		round:centerColor="@color/translucent"
+		round:ringColor="@color/translucent"
+		round:progressColor="@color/primary"
+		round:textColor="@color/white"
+		round:textSize="16sp"
+		round:isTextDisplay="true"
+		android:layout_centerVertical="true"
+		android:layout_centerHorizontal="true"/>
+
+	<com.tsukiseele.moeviewerr.ui.view.PageImageView
+		android:layout_height="match_parent"
+		android:layout_width="match_parent"
+		android:id="@+id/pageImageViewerLayout_PinchImageView"/>
+
+</RelativeLayout>
+

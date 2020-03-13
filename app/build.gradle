@@ -1,0 +1,67 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+    defaultConfig {
+        applicationId "com.tsukiseele.moeviewerr"
+        minSdkVersion 22
+        targetSdkVersion 29
+        versionCode 122
+        versionName "1.2.2"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    //  Library
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    // 吐司
+    implementation 'com.github.GrenderG:Toasty:1.4.2'
+    // 多级列表
+    implementation 'com.hgDendi:expandable-recyclerview-adapter:1.0.1'
+    // 质感搜索框
+    implementation 'com.miguelcatalan:materialsearchview:1.4.0'
+    // 标签流布局
+    implementation 'com.hyman:flowlayout-lib:1.1.2'
+    // 底部对话框
+    implementation 'me.shaohui:bottomdialog:1.1.9'
+    // 图片加载
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    // 状态栏
+    implementation 'com.github.fodroid:XStatusBarHelper:v1.1'
+    // https://mvnrepository.com/artifact/com.jakewharton/disklrucache
+    implementation group: 'com.jakewharton', name: 'disklrucache', version: '2.0.2'
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
+    // https://mvnrepository.com/artifact/org.jsoup/jsoup
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.11.3'
+    // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.10.0'
+    // https://mvnrepository.com/artifact/com.squareup.okio/okio
+    implementation group: 'com.squareup.okio', name: 'okio', version: '1.14.1'
+    // Skip this if you don't want to use integration libraries or configure Glide.
+}

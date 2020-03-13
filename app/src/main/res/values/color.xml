@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!--窗口背景-->
+	<color name="bg_window">#ECEFF1</color>
+
+    <color name="green_500">#009688</color>
+	<color name="green_600">#00897B</color>
+    <color name="green_700">#00796B</color>
+
+	<!--基色-->
+	<!--color name="primary">#3F51B5</color-->
+	<color name="primary">#F06292</color>
+	<!--color name="primary_dark">#303F9F</color-->
+	<color name="primary_dark">#FF4081</color>
+	<color name="primary_light">#C5CAE9</color>
+	
+	<!--强调色-->
+	<!--color name="accent">#448AFF</color-->
+	<color name="accent">#FF80AB</color>
+	
+	<!--基色-文本-->
+	<color name="text">#212121</color> 
+	<color name="text_dark">#424242</color>
+	<color name="text_light">#C5CAE9</color>
+	<color name="text_translucent_white">#BFFFFFFF</color>
+	<color name="text_translucent_black">#BF000000</color>
+	
+	<!--次级-文本-->
+	<color name="secondary_text">#757575</color>
+	
+	<!--分割色-->
+	<color name="divider">#BDBDBD</color>
+	
+	<!--单色-->
+	<color name="white">#FFFFFF</color>
+	<color name="white_translucent">#3FFFFFFF</color>
+	<color name="black">#000000</color>
+	<color name="black_translucent">#3F000000</color>
+	
+	<!--特殊-->
+	<color name="layout_back_deep">#E0E0E0</color>
+	<color name="layout_back">#EEEEEE</color>
+	<color name="item_select">#DBDBDB</color>
+	
+	<!--扩展-->
+	<color name="translucent">#00000000</color>
+	<color name="color_grey_200">#EEEEEE</color>
+	<color name="color_grey_300">#E0E0E0</color>
+	<color name="color_grey_400">#BDBDBD</color>
+	<color name="color_grey_500">#9E9E9E</color>
+	
+	<color name="color_teal_500">#009688</color>
+	<color name="color_deep_purple_500">#673AB7</color>
+	<color name="color_blue_grey_500">#607D8B</color>
+	<color name="color_blue_500">#2196F3</color>
+	
+</resources>
+

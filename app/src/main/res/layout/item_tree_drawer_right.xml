@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal">
+
+	<ImageView
+		android:layout_height="30dp"
+		android:layout_width="30dp"
+		android:layout_gravity="center"
+		android:scaleType="centerCrop"
+		android:id="@+id/itemDrawerRightTreeItemIcon_ImageView"
+		android:layout_marginStart="20dp"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="0dp"
+		android:layout_weight="1.0"
+		android:textSize="15sp"
+		android:textColor="@color/black"
+		android:padding="8dp"
+		android:singleLine="true"
+		android:ellipsize="marquee"
+		android:focusable="true"
+		android:focusableInTouchMode="true"
+		android:marqueeRepeatLimit="marquee_forever"
+		android:id="@+id/itemDrawerRightTreeItem_TextView"/>
+
+</LinearLayout>
+

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	
+	<!--PreferenceCategory android:name="用户设置">
+		<EditTextPreference
+			android:dialogTitle="输入您的昵称"
+			android:key="onUserName"
+			android:singleLine="true"
+			android:summary="设置您的昵称，此项暂无任何用途"
+			android:name="昵称"/>
+		
+	</PreferenceCategory-->
+	
+	<PreferenceCategory android:title="基础设置">
+		<SwitchPreference
+			android:key="useSystemFont"
+			android:title="英文字体设置"
+			android:singleLine="true"
+			android:summaryOn="系统字体"
+			android:summaryOff="内置字体"/>
+		
+	</PreferenceCategory>
+	
+	<PreferenceCategory android:title="浏览设置">
+
+		<!--SwitchPreference
+			android:key="isSaveSiteSelector"
+			android:name="记录上次打开的站点"
+			android:defaultValue="true"
+			android:summaryOn="开启"
+			android:summaryOff="关闭"/-->
+
+		<Preference
+			android:key="onClearImageCache"
+			android:title="清空缓存"
+			android:singleLine="true"
+			android:summary="清空浏览时的略缩图缓存"/>
+		
+		<SwitchPreference
+			android:key="onSafeMode"
+			android:title="安全模式"
+			android:singleLine="true"
+			android:summaryOn="您已屏蔽不安全的内容"
+			android:summaryOff="您现在将可以浏览完整内容"/>
+		
+		<!--Preference
+			android:key="onImportCollections"
+			android:name="导入收藏"
+			android:singleLine="true"
+			android:summary="导入收藏夹数据，以恢复数据"/>
+		
+		<Preference
+			android:key="onExportCollections"
+			android:name="导出收藏"
+			android:singleLine="true"
+			android:summary="导出收藏夹数据，以防止丢失"/-->
+		
+	</PreferenceCategory>
+	
+	<PreferenceCategory android:title="下载设置">
+		<Preference
+			android:key="onDownloadPath"
+			android:singleLine="true"
+			android:title="下载路径"/>
+		
+		<!--EditTextPreference
+			android:dialogTitle="输入下载路径"
+			android:key="onDownloadPath"
+			android:singleLine="true"
+			android:summary="图片的下载路径"
+			android:name="下载路径"/-->
+
+		<SwitchPreference
+			android:key="isNomedia"
+			android:title="在媒体中隐藏下载的文件"
+			android:defaultValue="false"
+			android:singleLine="true"
+			android:summaryOn="在目录中创建.nomedia文件防止媒体扫描"
+			android:summaryOff="关闭"/>
+		
+	</PreferenceCategory>
+	
+	<PreferenceCategory android:title="调试">
+		
+		<SwitchPreference
+			android:key="isOpenLogger"
+			android:title="日志"
+			android:defaultValue="true"
+			android:summaryOn="生成错误日志，并在崩溃时导出异常信息到剪切板"
+			android:summaryOff="关闭"/>
+		
+	</PreferenceCategory>
+	
+</PreferenceScreen>
+

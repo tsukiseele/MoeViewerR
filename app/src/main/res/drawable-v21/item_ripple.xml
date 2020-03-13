@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+	android:color="@color/color_grey_400">
+	<!-- 水波纹效果 -->
+	<item>
+		<shape>
+            <!-- 中间的背景色-->
+            <solid android:color="@color/white"/>
+			<!-- 设置四个角的角度 -->
+            <!--corners android:radius="4dp"/-->
+        </shape>
+	</item>
+	<!--item android:drawable="@drawable/item_background" /-->
+</ripple>
