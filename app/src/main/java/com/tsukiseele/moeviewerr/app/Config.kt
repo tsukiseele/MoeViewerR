@@ -20,7 +20,7 @@ object Config {
     // 缓存数据目录
     val DIR_CACHE_DATA = File(DIR_APP_DATA, "cache")
     // 站点规则目录
-    val DIR_SITE_RULE = File(DIR_APP_DATA, "rules")
+    val DIR_SITE_PACK = File(DIR_APP_DATA, "rules")
     // 图片下载保存目录
     val DIR_IMAGE_DOWNLOAD =
         File(DIR_EXTERNAL_ROOT, Environment.DIRECTORY_PICTURES + "/MoeViewerR")

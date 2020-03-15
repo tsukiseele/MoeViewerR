@@ -86,7 +86,7 @@ class SettingsFragment : PreferenceFragment() {
 
             KEY_SAFE_MODE -> {
                 PreferenceHolder.putBoolean(KEY_SAFE_MODE, onSafeModePreference!!.isChecked)
-                SiteManager.reloadSites(Config.DIR_SITE_RULE)
+                SiteManager.reloadSites(Config.DIR_SITE_PACK)
             }
             KEY_IS_OPEN_LOGGER -> {
             }

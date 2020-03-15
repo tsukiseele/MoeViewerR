@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.tsukiseele.moeviewerr.app.Config
 import com.tsukiseele.moeviewerr.model.Tag
-import com.tsukiseele.moeviewerr.utils.IOUtil
 import java.io.File
 
 import java.io.IOException
@@ -59,13 +58,11 @@ class TagHolder private constructor() {
     }
 
     fun saveTags() {
-
         try {
-            IOUtil.writeText(TAG_DATA_FILE.absolutePath, Gson().toJson(tags))
+            TAG_DATA_FILE.writeText(Gson().toJson(tags))
         } catch (e: IOException) {
             e.printStackTrace()
         }
-
     }
 
     fun loadTags() {
@@ -100,39 +97,4 @@ class TagHolder private constructor() {
             return Gson().toJson(instance.tags)
         }
     }
-    //	public void saveTags() {
-    //		ObjectOutputStream oos = null;
-    //
-    //		try {
-    //			oos = new ObjectOutputStream(
-    //				new BufferedOutputStream(
-    //					new FileOutputStream(LABEL_FILE_PATH)));
-    //			oos.writeObject(tags);
-    //		} catch (IOException e) {
-    //			e.printStackTrace();
-    //		} finally {
-    //			try {
-    //				oos.close();
-    //			} catch (Exception e) {}
-    //		}
-    //	}
-
-    //	public void loadTags() {
-    //
-    //		ObjectInputStream ois = null;
-    //		try {
-    //			ois = new ObjectInputStream(
-    //				new BufferedInputStream(
-    //					new FileInputStream(LABEL_FILE_PATH)));
-    //			tags = (List<Tag>) ois.readObject();
-    //		} catch (IOException e) {
-    //			e.printStackTrace();
-    //		} catch (ClassNotFoundException e) {
-    //			e.printStackTrace();
-    //		} finally {
-    //			try {
-    //				ois.close();
-    //			} catch (Exception e) {}
-    //		}
-    //	}
 }

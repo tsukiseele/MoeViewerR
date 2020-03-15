@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.tsukiseele.moeviewerr.app.Config
 import com.tsukiseele.moeviewerr.model.Image
-import com.tsukiseele.moeviewerr.utils.IOUtil
 import com.tsukiseele.sakurawler.Sakurawler
 import com.tsukiseele.sakurawler.SiteManager
 import java.io.File
@@ -97,7 +96,7 @@ class FavoritesHolder private constructor(val favorites: MutableMap<String, Muta
 
         fun saveState(): Boolean {
             try {
-                IOUtil.writeText(Config.FILE_FAVORITES, Gson().toJson(get().favorites))
+                File(Config.FILE_FAVORITES).writeText(Gson().toJson(get().favorites))
                 return true
             } catch (e: Exception) {
                 e.printStackTrace()

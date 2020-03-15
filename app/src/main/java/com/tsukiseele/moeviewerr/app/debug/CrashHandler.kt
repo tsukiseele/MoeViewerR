@@ -13,8 +13,8 @@ import com.tsukiseele.moeviewerr.app.App
 import com.tsukiseele.moeviewerr.app.Config
 import com.tsukiseele.moeviewerr.dataholder.PreferenceHolder
 import com.tsukiseele.moeviewerr.ui.fragments.SettingsFragment
-import com.tsukiseele.moeviewerr.utils.IOUtil
 import com.tsukiseele.moeviewerr.utils.Util
+import com.tsukiseele.sakurawler.utils.IOUtil
 import es.dmoral.toasty.Toasty
 import java.io.File
 import java.io.PrintWriter
@@ -215,7 +215,7 @@ object CrashHandler : UncaughtExceptionHandler {
                 if (!dir.exists()) dir.mkdirs()
                 if (dir.listFiles()!!.size > 100)
                     IOUtil.deleteDirectoryAllFile(dir.absolutePath)
-                IOUtil.writeText(File(dir, fileName).absolutePath, sb.toString())
+                File(dir, fileName).writeText(sb.toString())
                 return fileName
             }
         } catch (e: Exception) {

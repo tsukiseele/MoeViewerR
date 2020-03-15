@@ -36,6 +36,7 @@ import com.tsukiseele.moeviewerr.ui.view.TagsAdapter
 import com.tsukiseele.moeviewerr.ui.view.TagsFlowLayout
 import com.tsukiseele.moeviewerr.utils.*
 import com.tsukiseele.sakurawler.core.HtmlParser
+import com.tsukiseele.sakurawler.utils.IOUtil
 import com.zhy.view.flowlayout.FlowLayout
 import es.dmoral.toasty.Toasty
 import me.shaohui.bottomdialog.BottomDialog
@@ -222,7 +223,7 @@ class ImageViewPagerFragment : Fragment() {
         BottomDialog.create(fragmentManager)
             .setLayoutRes(R.layout.dialog_tags_flow)
             .setViewListener { view ->
-                val tagsText = mImage!!.tags
+                val tagsText = mImage!!.tags?.trim()
                 if (!tagsText.isNullOrBlank()) {
                     /*
                     val tags = (fun (regex: String) : Array<String> {

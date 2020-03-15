@@ -14,8 +14,8 @@ import com.tsukiseele.moeviewerr.app.Config
 import com.tsukiseele.moeviewerr.app.Premissions
 import com.tsukiseele.moeviewerr.ui.activitys.abst.BaseActivity
 import com.tsukiseele.moeviewerr.utils.DensityUtil
-import com.tsukiseele.moeviewerr.utils.IOUtil
 import com.tsukiseele.moeviewerr.utils.startActivityOfFadeAnimation
+import com.tsukiseele.sakurawler.utils.IOUtil
 import es.dmoral.toasty.Toasty
 import java.util.*
 

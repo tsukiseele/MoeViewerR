@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Looper
 
 import com.bumptech.glide.Glide
+import com.tsukiseele.sakurawler.utils.IOUtil
 
 /**
  * Glide缓存工具类

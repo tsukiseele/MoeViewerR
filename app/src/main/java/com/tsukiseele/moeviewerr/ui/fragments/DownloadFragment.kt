@@ -20,7 +20,6 @@ import com.tsukiseele.koradownload.base.Downloadable
 import com.tsukiseele.moeviewerr.R
 import com.tsukiseele.moeviewerr.libraries.BaseAdapter
 import com.tsukiseele.moeviewerr.libraries.BaseViewHolder
-import com.tsukiseele.moeviewerr.utils.IOUtil
 import java.net.SocketTimeoutException
 import java.util.ArrayList
 import java.util.Collections
@@ -29,6 +28,7 @@ import com.tsukiseele.koradownload.SimpleTaskCallback
 import com.tsukiseele.koradownload.base.DownloadTask.*
 import com.tsukiseele.moeviewerr.app.App
 import com.tsukiseele.moeviewerr.ui.fragments.abst.BaseMainFragment
+import com.tsukiseele.sakurawler.utils.IOUtil
 import es.dmoral.toasty.Toasty
 
 class DownloadFragment : BaseMainFragment() {

@@ -217,13 +217,13 @@ abstract class BaseCrawler : Serializable {
          *
          */
         fun encodeURL(url: String): String {
-            var url = url
-            val ESCAPES = arrayOf(
-                arrayOf("&amp;", "&"),
-                arrayOf(" ", "%20")
-            )
-            for (escape in ESCAPES) url =
-                url.replace(escape[0].toRegex(), escape[1])
+//            var url = url
+//            val ESCAPES = arrayOf(
+//                arrayOf("&amp;", "&"),
+//                arrayOf(" ", "%20")
+//            )
+//            for (escape in ESCAPES) url =
+//                url.replace(escape[0].toRegex(), escape[1])
             return url
         }
 

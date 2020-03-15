@@ -129,7 +129,7 @@ object SiteManager {
                         IOUtil.readByteArray(zipFile.getInputStream(entry))
                     sites.add(Site.fromJSON(String(bytes!!, Charset.forName(IOUtil.DEFAULT_CHARSET))))
                 } catch (e: Exception) {
-                    errorMessage["[" + IOUtil.getUrlFilename(zip.name) + ": " + entry.name + "]"] = e
+                    errorMessage["[" + IOUtil.getUrlFileName(zip.name) + ": " + entry.name + "]"] = e
                 }
             }
         } finally {

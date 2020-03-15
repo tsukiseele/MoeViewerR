@@ -6,12 +6,11 @@ import androidx.collection.LruCache
 import com.jakewharton.disklrucache.DiskLruCache
 import com.tsukiseele.moeviewerr.app.App
 import com.tsukiseele.moeviewerr.app.Config
+import com.tsukiseele.sakurawler.utils.IOUtil.MB
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-
-import com.tsukiseele.moeviewerr.utils.IOUtil.MB
 
 object BitmapCacheHolder {
     private var diskLruCache: DiskLruCache? = null

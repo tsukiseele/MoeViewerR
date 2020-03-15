@@ -1,6 +1,7 @@
 package com.tsukiseele.sakurawler.utils
 
 import java.io.*
+import java.net.URLDecoder
 import java.text.DecimalFormat
 import java.util.*
 import java.util.zip.ZipEntry
@@ -127,17 +128,17 @@ object IOUtil {
     }
 
     @Throws(IOException::class)
-    fun writeByteArray(filePath: String?, `is`: InputStream) {
+    fun writeBytes(filePath: String?, inputStream: InputStream) {
         var bos: BufferedOutputStream? = null
         var bis: BufferedInputStream? = null
         try {
-            bis = BufferedInputStream(`is`)
+            bis = BufferedInputStream(inputStream)
             bos = BufferedOutputStream(
                 FileOutputStream(filePath)
             )
             var len: Int
             val buff = ByteArray(BUFF_SIZE)
-            while (`is`.read(buff).also { len = it } != -1) bos.write(buff, 0, len)
+            while (inputStream.read(buff).also { len = it } != -1) bos.write(buff, 0, len)
         } finally {
             close(bos)
             close(bis)
@@ -145,7 +146,7 @@ object IOUtil {
     }
 
     @Throws(IOException::class)
-    fun writeByteArray(filePath: String?, datas: ByteArray?) {
+    fun writeBytes(filePath: String?, datas: ByteArray?) {
         var bos: BufferedOutputStream? = null
         try {
             bos = BufferedOutputStream(
@@ -158,15 +159,16 @@ object IOUtil {
     }
 
     @Throws(IOException::class)
-    fun readByteArray(`is`: InputStream?): ByteArray {
+    fun readByteArray(inputStream: InputStream?): ByteArray {
         var bis: BufferedInputStream? = null
         var baos: ByteArrayOutputStream? = null
         try {
-            bis = BufferedInputStream(`is`)
+            bis = BufferedInputStream(inputStream)
             baos = ByteArrayOutputStream()
             val buff = ByteArray(BUFF_SIZE)
-            var length = 0
-            while (bis.read(buff).also { length = it } != -1) baos.write(buff, 0, length)
+            var length: Int
+            while (bis.read(buff).also { length = it } != -1)
+                baos.write(buff, 0, length)
         } finally {
             close(bis)
             close(baos)
@@ -183,7 +185,8 @@ object IOUtil {
             bis = BufferedInputStream(FileInputStream(filePath))
             baos = ByteArrayOutputStream()
             var length: Int
-            while (bis.read(buff).also { length = it } != -1) baos.write(buff, 0, length)
+            while (bis.read(buff).also { length = it } != -1)
+                baos.write(buff, 0, length)
         } finally {
             close(bis)
             close(baos)
@@ -205,11 +208,11 @@ object IOUtil {
     }
 
     @Throws(IOException::class)
-    fun <T : Serializable?> writeSerializable(filePath: String?, `object`: T) {
+    fun <T : Serializable?> writeSerializable(filePath: String?, obj: T) {
         var oos: ObjectOutputStream? = null
         try {
             oos = ObjectOutputStream(FileOutputStream(filePath))
-            oos.writeObject(`object`)
+            oos.writeObject(obj)
         } finally {
             close(oos)
         }
@@ -293,7 +296,14 @@ object IOUtil {
     fun copyFile(fromPath: String?, toPath: String?): Boolean {
         if (fromPath.isNullOrBlank() || toPath.isNullOrBlank()) return false
         mkdirsParent(toPath)
-        writeByteArray(toPath, readByteArray(fromPath))
+        writeBytes(toPath, readByteArray(fromPath))
+        return true
+    }
+
+    fun copyFile(from: File, to: File): Boolean {
+        if (!from.exists()) return false
+        mkdirsParent(from)
+        writeBytes(to.absolutePath, readByteArray(from.absolutePath))
         return true
     }
 
@@ -322,7 +332,7 @@ object IOUtil {
     fun moveFile(fromPath: String, toPath: String): Boolean {
         if (fromPath.isBlank() || toPath.isBlank()) return false
         mkdirsParent(toPath)
-        writeByteArray(fromPath, readByteArray(toPath))
+        writeBytes(fromPath, readByteArray(toPath))
         deleteFile(fromPath)
         return true
     }
@@ -391,11 +401,43 @@ object IOUtil {
         return files
     }
 
-    fun getUrlFilename(url: String): String {
-        var filename = url.substring(url.lastIndexOf("/") + 1)
-        val endIndex = filename.indexOf("?")
-        if (endIndex != -1) filename = filename.substring(0, endIndex)
-        return filename
+    fun getRandomFile(directory: File?, suffixs: Array<String>): File? {
+        if (directory == null || !directory.isDirectory)
+            return null
+        val images = directory.listFiles(FilenameFilter { parent, name ->
+            for (suffix in suffixs)
+                if (name.endsWith(suffix))
+                    return@FilenameFilter true
+            false
+        })
+        return if (images != null && images.size > 0)
+            images[(Math.random() * images.size).toInt()]
+        else
+            null
+    }
+
+//    fun getUrlFileName(url: String): String {
+//        var filename = url.substring(url.lastIndexOf("/") + 1)
+//        val endIndex = filename.indexOf("?")
+//        if (endIndex != -1) filename = filename.substring(0, endIndex)
+//        return filename
+//    }
+
+    fun getUrlFileName(_url: String): String {
+        val url = URLDecoder.decode(_url, "utf-8")
+        val nameStart = url.lastIndexOf('/')
+        val nameEnd = url.lastIndexOf('.')
+        if (nameStart != -1) {
+            if (nameStart > nameEnd)
+                return url.substring(nameStart + 1)
+            val name = url.substring(nameStart + 1, nameEnd)
+            val suffix = """[0-9a-zA-Z]+""".toRegex()
+                .find(url.substring(nameEnd))?.value
+            return if (suffix == null) url.substring(nameStart + 1)
+            else "$name.$suffix"
+        } else {
+            return url
+        }
     }
 
     fun appendFilename(file: File, append: String): File {
@@ -423,25 +465,6 @@ object IOUtil {
         return getFileSuffix(file.absolutePath)
     }
 
-    fun getWindowsFilename(filename: String): String {
-        return filename.replace(":".toRegex(), "%3A")
-            .replace("\\*".toRegex(), "%2A")
-            .replace("\\?".toRegex(), "%3F")
-            .replace("\"".toRegex(), "%22")
-            .replace("<".toRegex(), "%3C")
-            .replace(">".toRegex(), "%3E")
-            .replace("\\|".toRegex(), "%7C")
-    }
-
-    fun getWindowsPath(filename: String): String {
-        return filename.replace("\\*".toRegex(), "%2A")
-            .replace("\\?".toRegex(), "%3F")
-            .replace("\"".toRegex(), "%22")
-            .replace("<".toRegex(), "%3C")
-            .replace(">".toRegex(), "%3E")
-            .replace("\\|".toRegex(), "%7C")
-    }
-
     fun getPureFilename(filename: String): String {
         return filename.replace("\\.\\.\\\\|\\\\|/|../".toRegex(), "-")
     }
@@ -464,10 +487,6 @@ object IOUtil {
         override fun toString(): String {
             return name
         }
-
-//        init {
-//            this.size = size
-//        }
     }
 
     object ZipUtil {
@@ -481,7 +500,7 @@ object IOUtil {
                 zos = ZipOutputStream(FileOutputStream(zip))
                 val fileList =
                     scanDirectory(directory)
-                for (f in fileList!!) {
+                for (f in fileList) {
                     bis = BufferedInputStream(FileInputStream(f))
                     val entry = ZipEntry(f.absolutePath.replace(directory.absolutePath, ""))
                     zos.putNextEntry(entry)

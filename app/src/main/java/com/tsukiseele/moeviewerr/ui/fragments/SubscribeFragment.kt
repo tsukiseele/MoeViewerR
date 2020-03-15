@@ -1,6 +1,5 @@
 package com.tsukiseele.moeviewerr.ui.fragments
 
-import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
@@ -20,9 +19,9 @@ import com.tsukiseele.moeviewerr.libraries.BaseViewHolder
 import com.tsukiseele.moeviewerr.ui.fragments.abst.BaseMainFragment
 import com.tsukiseele.moeviewerr.utils.*
 import com.tsukiseele.sakurawler.SiteManager
+import com.tsukiseele.sakurawler.utils.IOUtil
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_subscribe.*
-import me.shihao.library.XStatusBarHelper
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -85,14 +84,15 @@ class SubscribeFragment : BaseMainFragment() {
             Thread {
                 try {
                     val inputStream = OkHttpUtil.get(url).body()!!.byteStream()
+
                     IOUtil.writeBytes(
-                        Config.DIR_SITE_RULE.toString() + File.separator + IOUtil.getUrlFileName(
+                        Config.DIR_SITE_PACK.toString() + File.separator + IOUtil.getUrlFileName(
                             url
                         ), inputStream
                     )
                     IOUtil.close(inputStream)
 
-                    SiteManager.reloadSites(Config.DIR_SITE_RULE)
+                    SiteManager.reloadSites(Config.DIR_SITE_PACK)
                     mainActivity.runOnUiThread {
                         mainActivity.drawerRightTreeAdapter!!
                             .updateDataSet(SiteManager.getSiteMap())
@@ -108,8 +108,8 @@ class SubscribeFragment : BaseMainFragment() {
             val pack = File(url)
             if (pack.exists()) {
                 try {
-                    IOUtil.copyFile(pack, File(Config.DIR_SITE_RULE, pack.name))
-                    SiteManager.loadSites(Config.DIR_SITE_RULE)
+                    IOUtil.copyFile(pack, File(Config.DIR_SITE_PACK, pack.name))
+                    SiteManager.loadSites(Config.DIR_SITE_PACK)
                     mainActivity.drawerRightTreeAdapter!!.updateDataSet(SiteManager.getSiteMap())
                     ToastUtil.showText("导入成功！")
                     mainActivity.openDefaultSite()

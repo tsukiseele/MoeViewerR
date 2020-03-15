@@ -14,7 +14,6 @@ import com.tsukiseele.moeviewerr.R
 import com.tsukiseele.moeviewerr.app.debug.CrashHandler
 import com.tsukiseele.moeviewerr.dataholder.PreferenceHolder
 import com.tsukiseele.moeviewerr.ui.fragments.SettingsFragment
-import com.tsukiseele.moeviewerr.utils.TextUtil
 import com.tsukiseele.sakurawler.SiteManager
 import es.dmoral.toasty.Toasty
 import java.util.*
@@ -33,7 +32,7 @@ class App : Application() {
 
         Config.initAppDirectory()
 
-        SiteManager.reloadSites(Config.DIR_SITE_RULE)
+        SiteManager.reloadSites(Config.DIR_SITE_PACK)
 
         Glide.get(this)
     }

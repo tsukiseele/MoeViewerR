@@ -27,11 +27,11 @@ import com.tsukiseele.moeviewerr.ui.activitys.abst.BaseFragmentActivity
 import com.tsukiseele.moeviewerr.ui.adapter.ImageGridAdapter.Companion.TYPE_GRID_3_COL
 import com.tsukiseele.moeviewerr.ui.adapter.ImageStaggeredAdapter.Companion.TYPE_FLOW_3_COL
 import com.tsukiseele.moeviewerr.ui.fragments.CatalogFragment
-import com.tsukiseele.moeviewerr.utils.IOUtil
 import com.tsukiseele.moeviewerr.utils.TextUtil
 import com.tsukiseele.moeviewerr.utils.Util
 import com.tsukiseele.sakurawler.core.HtmlParser
 import com.tsukiseele.sakurawler.model.Catalog
+import com.tsukiseele.sakurawler.utils.IOUtil
 import es.dmoral.toasty.Toasty
 import java.io.File
 

@@ -1,5 +1,5 @@
 package com.tsukiseele.moeviewerr.utils
-
+/*
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.BufferedReader
@@ -19,6 +19,7 @@ import java.io.ObjectOutputStream
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
 import java.io.Serializable
+import java.net.URLDecoder
 import java.text.DecimalFormat
 import java.util.ArrayList
 import java.util.zip.ZipEntry
@@ -498,7 +499,8 @@ object IOUtil {
             null
     }
 
-    fun getUrlFileName(url: String): String {
+    fun getUrlFileName(_url: String): String {
+        val url = URLDecoder.decode(_url, "utf-8")
         val nameStart = url.lastIndexOf('/')
         val nameEnd = url.lastIndexOf('.')
         if (nameStart != -1) {
@@ -611,3 +613,4 @@ object IOUtil {
         }
     }
 }
+*/

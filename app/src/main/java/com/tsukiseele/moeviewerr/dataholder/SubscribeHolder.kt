@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.tsukiseele.moeviewerr.app.Config
 import com.tsukiseele.moeviewerr.model.Subscribe
-import com.tsukiseele.moeviewerr.utils.IOUtil
 import java.io.File
 import java.lang.Exception
 
@@ -34,7 +33,7 @@ class SubscribeHolder private constructor() : ArrayList<Subscribe>() {
 
         fun saveConfig(): Boolean {
             try {
-                IOUtil.writeText(Config.FILE_SUBSCRIBE, Gson().toJson(instance))
+                File(Config.FILE_SUBSCRIBE).writeText(Gson().toJson(instance))
                 return true
             } catch (e: Exception) {
                 e.printStackTrace()
