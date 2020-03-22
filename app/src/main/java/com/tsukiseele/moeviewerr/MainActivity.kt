@@ -1,5 +1,6 @@
 package com.tsukiseele.moeviewerr
 
+import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
@@ -20,10 +21,13 @@ import com.tsukiseele.moeviewerr.app.Config
 import com.tsukiseele.moeviewerr.dataholder.DownloadHolder
 import com.tsukiseele.moeviewerr.dataholder.GlobalObjectHolder
 import com.tsukiseele.moeviewerr.dataholder.PreferenceHolder
+import com.tsukiseele.moeviewerr.dataholder.PreferenceHolder.KEY_FIRST_START
 import com.tsukiseele.moeviewerr.dataholder.PreferenceHolder.KEY_LASTOPEN_SITE
+import com.tsukiseele.moeviewerr.dataholder.SubscribeHolder
 import com.tsukiseele.moeviewerr.interfaces.ExpandableRecyclerViewListener
 import com.tsukiseele.moeviewerr.interfaces.OnMenuCreateListener
 import com.tsukiseele.moeviewerr.model.SiteGroup
+import com.tsukiseele.moeviewerr.model.Subscribe
 import com.tsukiseele.moeviewerr.ui.activitys.AboutActivity
 import com.tsukiseele.moeviewerr.ui.activitys.SettingsActivity
 import com.tsukiseele.moeviewerr.ui.activitys.abst.BaseActivity
@@ -33,12 +37,17 @@ import com.tsukiseele.moeviewerr.ui.adapter.ImageStaggeredAdapter
 import com.tsukiseele.moeviewerr.ui.fragments.*
 import com.tsukiseele.moeviewerr.ui.fragments.abst.BaseMainFragment
 import com.tsukiseele.moeviewerr.ui.fragments.abst.SitePagerFragment
+import com.tsukiseele.moeviewerr.utils.OkHttpUtil
+import com.tsukiseele.moeviewerr.utils.ToastUtil
 import com.tsukiseele.moeviewerr.utils.Util
 import com.tsukiseele.moeviewerr.utils.startActivityOfFadeAnimation
 import com.tsukiseele.sakurawler.SiteManager
 import com.tsukiseele.sakurawler.model.Site
+import com.tsukiseele.sakurawler.utils.IOUtil
 import es.dmoral.toasty.Toasty
 import me.shihao.library.XStatusBarHelper
+import java.io.File
+import java.io.IOException
 import java.util.*
 import java.util.regex.Pattern
 
@@ -132,6 +141,24 @@ class MainActivity : BaseActivity() {
         checkSiteLoadError()
         // 绑定下载服务
         DownloadHolder.bind(this)
+        // 首次启动时提示是否订阅默认源
+        if (PreferenceHolder.getBoolean(KEY_FIRST_START, true)) {
+            PreferenceHolder.putBoolean(KEY_FIRST_START, false)
+
+            AlertDialog.Builder(this)
+                .setTitle("提示")
+                .setMessage("是否使用默认订阅源")
+                .setPositiveButton("确定", { dialog, which ->
+                    val subscribe = Subscribe("Default",
+                        "https://raw.githubusercontent.com/tsukiseele/MoeViewerR/master/packs/default_package.zip",
+                        Date())
+                    SubscribeHolder.get().add(subscribe)
+                    SubscribeHolder.saveConfig()
+                    syncSubscribe(this, subscribe.url)
+                })
+                .setNegativeButton("取消", null)
+                .show()
+        }
     }
 
 
@@ -391,5 +418,54 @@ class MainActivity : BaseActivity() {
 
     companion object {
         private val ID_CONTAINER = R.id.activityMainContent_FrameLayout
+
+        fun syncSubscribe(mainActivity: MainActivity, url: String) {
+            if (url.startsWith("http")) {
+                val progress = ProgressDialog.show(
+                    mainActivity, "同步中", "请耐心等待...", true, false
+                )
+                /**
+                 * 载入规则
+                 */
+                Thread {
+                    try {
+                        val inputStream = OkHttpUtil.get(url).body()!!.byteStream()
+
+                        IOUtil.writeBytes(
+                            Config.DIR_SITE_PACK.toString() + File.separator + IOUtil.getUrlFileName(
+                                url
+                            ), inputStream
+                        )
+                        IOUtil.close(inputStream)
+
+                        SiteManager.reloadSites(Config.DIR_SITE_PACK)
+                        mainActivity.runOnUiThread {
+                            mainActivity.drawerRightTreeAdapter!!
+                                .updateDataSet(SiteManager.getSiteMap())
+                            ToastUtil.showText("同步成功！")
+                        }
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                        mainActivity.runOnUiThread { ToastUtil.showText("失败: $e") }
+                    }
+                    progress.dismiss()
+                }.start()
+            } else {
+                val pack = File(url)
+                if (pack.exists()) {
+                    try {
+                        IOUtil.copyFile(pack, File(Config.DIR_SITE_PACK, pack.name))
+                        SiteManager.loadSites(Config.DIR_SITE_PACK)
+                        mainActivity.drawerRightTreeAdapter!!.updateDataSet(SiteManager.getSiteMap())
+                        ToastUtil.showText("导入成功！")
+                        mainActivity.openDefaultSite()
+                    } catch (e: IOException) {
+                        ToastUtil.showText("导入失败: $e")
+                    }
+                } else {
+                    ToastUtil.showText("文件不存在！")
+                }
+            }
+        }
     }
 }

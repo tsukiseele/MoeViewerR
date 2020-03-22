@@ -1,6 +1,5 @@
 package com.tsukiseele.moeviewerr.ui.fragments
 
-import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.View
@@ -10,20 +9,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.tsukiseele.moeviewerr.MainActivity
+import com.tsukiseele.moeviewerr.MainActivity.Companion.syncSubscribe
 import com.tsukiseele.moeviewerr.R
-import com.tsukiseele.moeviewerr.app.Config
-import com.tsukiseele.moeviewerr.model.Subscribe
 import com.tsukiseele.moeviewerr.dataholder.SubscribeHolder
 import com.tsukiseele.moeviewerr.libraries.BaseAdapter
 import com.tsukiseele.moeviewerr.libraries.BaseViewHolder
+import com.tsukiseele.moeviewerr.model.Subscribe
 import com.tsukiseele.moeviewerr.ui.fragments.abst.BaseMainFragment
-import com.tsukiseele.moeviewerr.utils.*
-import com.tsukiseele.sakurawler.SiteManager
-import com.tsukiseele.sakurawler.utils.IOUtil
+import com.tsukiseele.moeviewerr.utils.Util
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_subscribe.*
-import java.io.File
-import java.io.IOException
 import java.util.*
 
 class SubscribeFragment : BaseMainFragment() {
@@ -72,56 +67,6 @@ class SubscribeFragment : BaseMainFragment() {
             .show()
     }
 
-    fun syncSubscribe(url: String) {
-        val mainActivity = (context as MainActivity)
-        if (url.startsWith("http")) {
-            val progress = ProgressDialog.show(
-                context, "同步中", "请耐心等待...", true, false
-            )
-            /**
-             * 载入规则
-             */
-            Thread {
-                try {
-                    val inputStream = OkHttpUtil.get(url).body()!!.byteStream()
-
-                    IOUtil.writeBytes(
-                        Config.DIR_SITE_PACK.toString() + File.separator + IOUtil.getUrlFileName(
-                            url
-                        ), inputStream
-                    )
-                    IOUtil.close(inputStream)
-
-                    SiteManager.reloadSites(Config.DIR_SITE_PACK)
-                    mainActivity.runOnUiThread {
-                        mainActivity.drawerRightTreeAdapter!!
-                            .updateDataSet(SiteManager.getSiteMap())
-                        ToastUtil.showText("同步成功！")
-                    }
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                    mainActivity.runOnUiThread { ToastUtil.showText("失败: $e") }
-                }
-                progress.dismiss()
-            }.start()
-        } else {
-            val pack = File(url)
-            if (pack.exists()) {
-                try {
-                    IOUtil.copyFile(pack, File(Config.DIR_SITE_PACK, pack.name))
-                    SiteManager.loadSites(Config.DIR_SITE_PACK)
-                    mainActivity.drawerRightTreeAdapter!!.updateDataSet(SiteManager.getSiteMap())
-                    ToastUtil.showText("导入成功！")
-                    mainActivity.openDefaultSite()
-                } catch (e: IOException) {
-                    ToastUtil.showText("导入失败: $e")
-                }
-            } else {
-                ToastUtil.showText("文件不存在！")
-            }
-        }
-    }
-
     inner class SubscribeAdapter(val context: Context, val subscribes: MutableList<Subscribe>) :
         BaseAdapter<Subscribe>(context, subscribes, R.layout.item_subscribe) {
         override fun convert(context: Context, holder: BaseViewHolder, position: Int) {
@@ -129,7 +74,7 @@ class SubscribeFragment : BaseMainFragment() {
             holder.setText(R.id.itemSubscribeName_TextView, subscribe.name)
             holder.setText(R.id.itemSubscribeUrl_TextView, subscribe.url)
             holder.getView<ImageView>(R.id.itemSubscribe_ImageView).setOnClickListener {
-                syncSubscribe(subscribe.url)
+                syncSubscribe(context as MainActivity, subscribe.url)
             }
             holder.itemView.setOnClickListener {
                 AlertDialog.Builder(context)

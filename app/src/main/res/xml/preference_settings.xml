@@ -86,7 +86,7 @@
 			android:key="isOpenLogger"
 			android:title="日志"
 			android:defaultValue="true"
-			android:summaryOn="生成错误日志，并在崩溃时导出异常信息到剪切板"
+			android:summaryOn="生成错误日志，并在崩溃时日志信息到剪切板"
 			android:summaryOff="关闭"/>
 		
 	</PreferenceCategory>

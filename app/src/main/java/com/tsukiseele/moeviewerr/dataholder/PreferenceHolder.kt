@@ -13,6 +13,7 @@ object PreferenceHolder {
 
     const val KEY_LISTTYPE = "listType"
     const val KEY_LASTOPEN_SITE = "lastOpenSite"
+    const val KEY_FIRST_START = "firstStart"
 
     val preference = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
     val editor: SharedPreferences.Editor = preference.edit()

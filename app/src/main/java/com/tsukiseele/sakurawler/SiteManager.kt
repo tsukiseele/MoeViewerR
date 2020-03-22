@@ -95,7 +95,7 @@ object SiteManager {
                 try {
                     val data: String = IOUtil.readText(file.absolutePath)
                     // 将JSON转换为对象并添加到列表
-                    site = Site.Companion.fromJSON(data)
+                    site = Site.fromJSON(data)
                 } catch (e: Exception) {
                     errorMessage["[" + file.name + "]"] = e
                 }
@@ -127,7 +127,7 @@ object SiteManager {
                 try {
                     val bytes =
                         IOUtil.readByteArray(zipFile.getInputStream(entry))
-                    sites.add(Site.fromJSON(String(bytes!!, Charset.forName(IOUtil.DEFAULT_CHARSET))))
+                    sites.add(Site.fromJSON(String(bytes, Charset.forName(IOUtil.DEFAULT_CHARSET))))
                 } catch (e: Exception) {
                     errorMessage["[" + IOUtil.getUrlFileName(zip.name) + ": " + entry.name + "]"] = e
                 }
