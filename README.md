@@ -1,3 +1,5 @@
+![sample_1](./sample/ic_launcher-web.png)
+
 # MoeViewerR
 
 订阅式的漫画阅读应用，可支持Exhentai，以及Yande、SankakuComplex等绝大多数Booru图库。
