@@ -1,10 +1,10 @@
+![sample_1](./sample/ic_launcher-web.png)
+
 # MoeViewerR
 
 订阅式的漫画阅读应用，可支持Exhentai，以及Yande、SankakuComplex等绝大多数Booru图库。
 
 默认订阅源除少数站点外均不需要梯子，安装并订阅站点后即可食用。
-
-本软件只提供插件支持，具体内容与本应用无关。
 
 ## Requirement
 Android 5.1 (SDK 22) 或更高版本
