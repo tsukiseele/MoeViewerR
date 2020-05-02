@@ -13,6 +13,7 @@ Android 5.1 (SDK 22) 或更高版本
 - 安装 MoeViewerR
 
 - 添加订阅  
+
 有梯子  
 ```
 https://raw.githubusercontent.com/tsukiseele/MoeViewerR/master/packs/default_package.zip
