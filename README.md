@@ -12,14 +12,11 @@ Android 5.1 (SDK 22) 或更高版本
 ## Usage
 - 安装 MoeViewerR
 
-- 添加订阅
-
+- 添加订阅  
+```
 有梯子
-```
 https://raw.githubusercontent.com/tsukiseele/MoeViewerR/master/packs/default_package.zip
-```
 无梯子（不知道梯子是什么的也填这个）
-```
 https://awsl.re/static/raw/default_package.zip
 ```
 
