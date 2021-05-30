@@ -13,7 +13,7 @@ import com.tsukiseele.moeviewerr.app.App
 import com.tsukiseele.moeviewerr.app.Config
 import com.tsukiseele.moeviewerr.dataholder.PreferenceHolder
 import com.tsukiseele.moeviewerr.ui.fragments.SettingsFragment
-import com.tsukiseele.moeviewerr.utils.Util
+import com.tsukiseele.moeviewerr.utils.AndroidUtil
 import com.tsukiseele.sakurawler.utils.IOUtil
 import es.dmoral.toasty.Toasty
 import java.io.File
@@ -109,7 +109,7 @@ object CrashHandler : UncaughtExceptionHandler {
                 writer.close()
 
                 Looper.prepare()
-                Util.putTextIntoClip(context!!.resources.getString(R.string.app_name) + "_" + App.packageInfo!!.versionName + " :\n" + result)
+                AndroidUtil.putTextIntoClip(context!!.resources.getString(R.string.app_name) + "_" + App.packageInfo!!.versionName + " :\n" + result)
                 Toasty.error(context!!, "崩溃了！异常报告已导出到剪切板\n多次出现该异常可以向开发者报告此问题").show()
                 Looper.loop()
             } else {

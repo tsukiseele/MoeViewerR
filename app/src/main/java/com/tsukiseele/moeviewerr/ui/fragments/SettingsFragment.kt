@@ -58,7 +58,7 @@ class SettingsFragment : PreferenceFragment() {
     }
 
     private fun init() {
-        onDownloadPathPreference!!.summary = Config.DIR_IMAGE_DOWNLOAD.absolutePath
+        onDownloadPathPreference!!.summary = Config.DIR_IMAGE_SAVE.absolutePath
     }
 
     override fun onPreferenceTreeClick(
@@ -91,7 +91,7 @@ class SettingsFragment : PreferenceFragment() {
             KEY_IS_OPEN_LOGGER -> {
             }
             KEY_IS_NOMEDIA -> {
-                val file = File(Config.DIR_IMAGE_DOWNLOAD, ".nomedia")
+                val file = File(Config.DIR_IMAGE_SAVE, ".nomedia")
                 if (isNomediaPreference!!.isChecked) {
                     if (!file.exists()) {
                         try {

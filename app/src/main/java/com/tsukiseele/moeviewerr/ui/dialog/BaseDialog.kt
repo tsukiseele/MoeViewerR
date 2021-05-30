@@ -33,7 +33,7 @@ abstract class BaseDialog : DialogFragment() {
     private var mWidth: Int = 0
     private var mHeight: Int = 0
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
     }
@@ -60,7 +60,7 @@ abstract class BaseDialog : DialogFragment() {
     }
 
     private fun initParams() {
-        val window = dialog.window
+        val window = dialog!!.window
         if (window != null) {
             val params = window.attributes
             params.dimAmount = mDimAmount

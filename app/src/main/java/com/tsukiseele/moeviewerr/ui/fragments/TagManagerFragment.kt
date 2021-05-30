@@ -2,24 +2,28 @@ package com.tsukiseele.moeviewerr.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.tsukiseele.moeviewerr.R
-import com.tsukiseele.moeviewerr.model.Tag
+import com.tsukiseele.moeviewerr.app.Config
 import com.tsukiseele.moeviewerr.dataholder.TagHolder
+import com.tsukiseele.moeviewerr.model.Tag
 import com.tsukiseele.moeviewerr.ui.fragments.abst.BaseMainFragment
 import com.tsukiseele.moeviewerr.ui.view.RecyclerViewDivider
 import com.tsukiseele.moeviewerr.utils.DialogUtil
-import com.tsukiseele.moeviewerr.utils.Util
+import com.tsukiseele.moeviewerr.utils.AndroidUtil
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.frgament_tag_manager.*
-import java.lang.StringBuilder
+import java.io.File
+import kotlin.collections.LinkedHashMap
 
 class TagManagerFragment : BaseMainFragment() {
 
@@ -29,7 +33,7 @@ class TagManagerFragment : BaseMainFragment() {
         get() = R.layout.frgament_tag_manager
 
     override fun onDestroyView() {
-        TagHolder.instance.saveTags()
+        TagHolder.instance.save()
         super.onDestroyView()
     }
 
@@ -45,38 +49,57 @@ class TagManagerFragment : BaseMainFragment() {
         fragmentTagManager_FloatingActionButton.setOnClickListener {
             DialogUtil.showListDialog(
                 fragmentManager!!,
-                mutableListOf("导出所有内容到剪切板", "导出标签内容到剪切板", "导出JSON到剪切板"),
+                mutableListOf("从剪切板导入数据", "导出数据到剪切板"),
                 object :
                     DialogUtil.OnItemClickListener {
                     override fun onClick(view: View, position: Int) {
                         when (position) {
-                            0 ->
-                                StringBuilder().apply {
-                                    TagHolder.instance.tags.forEach {
-                                        append(it.tag).append(": ").append(it.siteName).append("\n")
+                            0 -> {
+                                val data = String(Base64.decode(AndroidUtil.getClipContent(), Base64.NO_WRAP.or(Base64.URL_SAFE)))
+
+                                File(Config.FILE_DEBUG_LOG).appendText(data)
+
+                                if (data.isEmpty() || data.isBlank()) {
+                                    Toasty.error(context!!, "剪切板为空！").show()
+                                } else {
+                                    try {
+                                        Gson().fromJson<LinkedHashMap<String, Tag>>(data,
+                                            object : TypeToken<LinkedHashMap<String, Tag>>() {}.type).also {
+                                            TagHolder.instance.addAll(it)
+                                            TagHolder.instance.save()
+                                            Toasty.success(context!!, "导入成功！").show()
+                                        }
+                                    } catch (e: Exception) {
+                                        Toasty.error(context!!, "导入失败！未知的数据格式").show()
                                     }
-                                }.toString().let {
-                                    Util.putTextIntoClip(it)
                                 }
-                            1 ->
-                                StringBuilder().apply {
-                                    TagHolder.instance.tags.forEach {
-                                        append(it.tag).append("\n")
-                                    }
-                                }.toString().let {
-                                    Util.putTextIntoClip(it)
-                                }
-                            2 -> Util.putTextIntoClip(TagHolder.toJson())
+
+//                                StringBuilder().apply {
+//                                    TagHolder.instance.tags.forEach {
+//                                        append(it.tag).append(": ").append(it.siteName).append("\n")
+//                                    }
+//                                }.toString().let {
+//                                    Util.putTextIntoClip(it)
+//                                }
+
+                            }
+                            1 -> {
+                                AndroidUtil.putTextIntoClip(Base64.encodeToString(
+                                    TagHolder.toJson().toByteArray(), Base64.NO_WRAP.or(Base64.URL_SAFE)))
+
+                                Toasty.success(context!!, "已导出！").show()
+                            }
                         }
-                        Toasty.success(context!!, "已导出").show()
                     }
                 })
         }
     }
 
-    class TagAdapter(private val context: Context, private val tagList: MutableList<Tag>) :
+    class TagAdapter(private val context: Context, private val tags: LinkedHashMap<String, Tag>) :
         RecyclerView.Adapter<TagAdapter.ViewHolder>() {
         private val layoutInflater: LayoutInflater
+        // 此处使用副本进行操作，修改数据后必须同步
+        private val values = tags.toList().toMutableList()
 
         init {
             this.layoutInflater = LayoutInflater.from(context)
@@ -91,24 +114,25 @@ class TagManagerFragment : BaseMainFragment() {
         override fun onBindViewHolder(viewHolder: ViewHolder, pos: Int) {
             viewHolder.item.setOnClickListener {
                 AlertDialog.Builder(context)
-                    .setItems(arrayOf("移除")) { p1, index ->
+                    .setItems(arrayOf("移除")) { _, index ->
                         when (index) {
-                            0 -> if (pos < tagList.size) {
-                                tagList.removeAt(pos)
+                            0 -> if (pos < tags.size) {
+                                // 同步移除
+                                tags.remove(tags.toList().get(pos).first)
+                                values.removeAt(pos)
                                 notifyItemRemoved(viewHolder.adapterPosition)
-                                notifyItemRangeChanged(0, tagList.size - 1)
+                                notifyItemRangeChanged(0, tags.size - 1)
                             }
                         }
                     }.show()
             }
-            val label = tagList[pos]
+            val label = values[pos].second
             viewHolder.label.text = label.tag
-            if (label.siteName != null)
-                viewHolder.siteName.text = label.siteName
+            viewHolder.siteName.text = label.siteName
         }
 
         override fun getItemCount(): Int {
-            return tagList.size
+            return tags.size
         }
 
         class ViewHolder(var item: View) : RecyclerView.ViewHolder(item) {

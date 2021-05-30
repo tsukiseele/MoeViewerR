@@ -29,7 +29,6 @@ class FavoriteFragment : BaseMainFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         mAdapter = ImageGridAdapter(context!!, FavoritesHolder.getImages())
         fragmentKira_RecyclerView.layoutManager = GridLayoutManager(context, 3)
         fragmentKira_RecyclerView.isScrollbarFadingEnabled = true

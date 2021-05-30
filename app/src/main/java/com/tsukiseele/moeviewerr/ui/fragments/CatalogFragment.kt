@@ -18,7 +18,7 @@ import com.tsukiseele.moeviewerr.libraries.BaseAdapter
 import com.tsukiseele.moeviewerr.model.Image
 import com.tsukiseele.moeviewerr.ui.activitys.ImageViewerActivity
 import com.tsukiseele.moeviewerr.ui.adapter.ImageGridAdapter
-import com.tsukiseele.moeviewerr.utils.Util
+import com.tsukiseele.moeviewerr.utils.AndroidUtil
 import com.tsukiseele.moeviewerr.utils.startActivityOfFadeAnimation
 import com.tsukiseele.sakurawler.core.HtmlParser.CatalogLoadCallback
 import com.tsukiseele.sakurawler.model.Catalog
@@ -84,7 +84,7 @@ class CatalogFragment : Fragment(), BaseAdapter.OnItemClickListener, CatalogLoad
         // 初始化适配器
         val images = ArrayList<Image>()
         /*
-        when (PreferenceHolder.getInt(PreferenceHolder.KEY_LISTTYPE, TYPE_GRID_3_COL)) {
+        when (PreferenceHolder.getInt(PreferenceHolder.KEY_LIST_TYPE, TYPE_GRID_3_COL)) {
             TYPE_FLOW_2_COL -> {
                 mListColumn = 2
                 mRecyclerView?.layoutManager =
@@ -138,7 +138,7 @@ class CatalogFragment : Fragment(), BaseAdapter.OnItemClickListener, CatalogLoad
                 it.endsWith(".mp4") || it.endsWith(".webm") || it.endsWith(".m3u8")
             } ?: false) {
             Toasty.info(context!!, "此项为视频，请使用外部应用打开").show()
-            Util.startSystemVideoPlayer(context!!, image.getLowUrl() ?: "")
+            AndroidUtil.startSystemVideoPlayer(context!!, image.getLowUrl() ?: "")
         } else {
             val intent = Intent(context, ImageViewerActivity::class.java)
             GlobalObjectHolder.put("images", images!!)

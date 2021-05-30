@@ -11,7 +11,7 @@ import com.tsukiseele.moeviewerr.R
 import com.tsukiseele.moeviewerr.model.Image
 import com.tsukiseele.moeviewerr.libraries.BaseAdapter
 import com.tsukiseele.moeviewerr.libraries.BaseViewHolder
-import com.tsukiseele.moeviewerr.utils.Util
+import com.tsukiseele.moeviewerr.utils.AndroidUtil
 
 class ImageGridAdapter(context: Context, imageList: MutableList<Image>) :
     BaseAdapter<Image>(context, imageList, R.layout.item_image_grid) {
@@ -28,7 +28,7 @@ class ImageGridAdapter(context: Context, imageList: MutableList<Image>) :
             ivCover.setImageResource(R.drawable.ic_image_off_white)
         } else {
             // 导入请求头
-            val url = Util.buildGlideUrl(image.coverUrl!!, image.crawler?.headers)
+            val url = AndroidUtil.buildGlideUrl(image.coverUrl!!, image.crawler?.headers)
 
             Glide.with(context)
                 .load(url)

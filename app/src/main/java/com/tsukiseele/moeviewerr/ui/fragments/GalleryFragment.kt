@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,7 +15,6 @@ import androidx.core.view.children
 import com.bumptech.glide.Glide
 import com.tsukiseele.moeviewerr.R
 import com.tsukiseele.moeviewerr.app.App
-import com.tsukiseele.moeviewerr.app.Config
 import com.tsukiseele.moeviewerr.model.Image
 import com.tsukiseele.moeviewerr.dataholder.GlobalObjectHolder
 import com.tsukiseele.moeviewerr.dataholder.FavoritesHolder
@@ -37,7 +35,6 @@ import com.tsukiseele.moeviewerr.ui.fragments.abst.SitePagerFragment
 import com.tsukiseele.moeviewerr.utils.*
 import com.tsukiseele.sakurawler.Sakurawler
 import com.tsukiseele.sakurawler.model.Site
-import java.io.File
 import java.net.SocketTimeoutException
 
 class GalleryFragment : SitePagerFragment {
@@ -100,7 +97,7 @@ class GalleryFragment : SitePagerFragment {
         mRecyclerView =
             container.findViewById<View>(R.id.listImageListFragment_RecyclerView) as RecyclerView
         // 初始化列表
-        when (PreferenceHolder.getInt(PreferenceHolder.KEY_LISTTYPE, TYPE_FLOW_3_COL)) {
+        when (PreferenceHolder.getInt(PreferenceHolder.KEY_LIST_TYPE, TYPE_FLOW_3_COL)) {
             TYPE_FLOW_2_COL -> {
                 mListColumn = 2
                 mRecyclerView?.layoutManager =
@@ -124,7 +121,7 @@ class GalleryFragment : SitePagerFragment {
         mRecyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (Util.isSlideToBottom(recyclerView))
+                if (AndroidUtil.isSlideToBottom(recyclerView))
                     loadGallery()
             }
         })
@@ -135,7 +132,7 @@ class GalleryFragment : SitePagerFragment {
                     GlobalObjectHolder.put("image_catalog", mImages[position])
                     val intent = Intent(context, CatalogActivity::class.java)
                     val imageView: ImageView? =
-                        when (PreferenceHolder.getInt(PreferenceHolder.KEY_LISTTYPE, -1)) {
+                        when (PreferenceHolder.getInt(PreferenceHolder.KEY_LIST_TYPE, -1)) {
                             TYPE_FLOW_2_COL,
                             TYPE_FLOW_3_COL ->
                                 view.findViewById(R.id.itemListImageStaggeredLayout_ImageView)
@@ -154,6 +151,7 @@ class GalleryFragment : SitePagerFragment {
                 }
             }
         })
+
         mAdapter?.setOnLongItemClickListener(object : BaseAdapter.OnLongItemClickListener {
             override fun onLongItemClick(view: View, position: Int) {
                 val image = mImages[position]

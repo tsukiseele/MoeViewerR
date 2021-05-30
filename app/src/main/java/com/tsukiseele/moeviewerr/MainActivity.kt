@@ -39,7 +39,7 @@ import com.tsukiseele.moeviewerr.ui.fragments.abst.BaseMainFragment
 import com.tsukiseele.moeviewerr.ui.fragments.abst.SitePagerFragment
 import com.tsukiseele.moeviewerr.utils.OkHttpUtil
 import com.tsukiseele.moeviewerr.utils.ToastUtil
-import com.tsukiseele.moeviewerr.utils.Util
+import com.tsukiseele.moeviewerr.utils.AndroidUtil
 import com.tsukiseele.moeviewerr.utils.startActivityOfFadeAnimation
 import com.tsukiseele.sakurawler.SiteManager
 import com.tsukiseele.sakurawler.model.Site
@@ -58,6 +58,7 @@ class MainActivity : BaseActivity() {
     private var drawerLeftNavigationView: NavigationView? = null
     // 右抽屉View
     private var drawerRightListView: RecyclerView? = null
+    //
     var drawerRightTreeAdapter: DrawerRightTreeAdapter? = null
         get() = field
         private set
@@ -112,7 +113,7 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // 每次启动都会初始化目录配置
-        Config.initAppDirectory()
+        Config.init(this)
 
         setContentView(R.layout.activity_main)
         drawerLayout = this.findViewById(R.id.activityMain_DrawerLayout)
@@ -135,8 +136,8 @@ class MainActivity : BaseActivity() {
             0F
         )
         // 设置左右抽屉的滑动范围
-        Util.setDrawerEdgeSize(this, drawerLayout, "Left", 0.15f)
-        Util.setDrawerEdgeSize(this, drawerLayout, "Right", 0.15f)
+        AndroidUtil.setDrawerEdgeSize(this, drawerLayout, "Left", 0.15f)
+        AndroidUtil.setDrawerEdgeSize(this, drawerLayout, "Right", 0.15f)
         // 检查插件错误
         checkSiteLoadError()
         // 绑定下载服务
@@ -150,11 +151,11 @@ class MainActivity : BaseActivity() {
                 .setMessage("是否使用默认订阅源")
                 .setPositiveButton("确定", { dialog, which ->
                     val subscribe = Subscribe("Default",
-                        "https://raw.githubusercontent.com/tsukiseele/MoeViewerR/master/packs/default_package.zip",
+                        "https://cdn.jsdelivr.net/gh/tsukiseele/MoeViewerR/packs/default_package.zip",
                         Date())
                     SubscribeHolder.get().add(subscribe)
                     SubscribeHolder.saveConfig()
-                    syncSubscribe(this, subscribe.url)
+                    syncSubscribe(this, subscribe.url, { openDefaultSite() } )
                 })
                 .setNegativeButton("取消", null)
                 .show()
@@ -270,8 +271,10 @@ class MainActivity : BaseActivity() {
             R.id.menuDrawerCollentions,
             R.id.menuDrawerTags,
             R.id.menuDrawerSubscribe,
-            R.id.menuDrawerDownloadManager ->
+            R.id.menuDrawerDownloadManager -> {
                 menu.findItem(R.id.menuSearch).isVisible = false
+                menu.findItem(R.id.menuListType).isVisible = false
+            }
         }
         return super.onPrepareOptionsMenu(menu)
     }
@@ -287,15 +290,15 @@ class MainActivity : BaseActivity() {
                 .setItems(arrayOf("瀑布流 - 2列", "瀑布流 - 3列", "网格 - 3列")) { di, pos ->
                     when (pos) {
                         0 -> PreferenceHolder.putInt(
-                            PreferenceHolder.KEY_LISTTYPE,
+                            PreferenceHolder.KEY_LIST_TYPE,
                             ImageStaggeredAdapter.TYPE_FLOW_2_COL
                         )
                         1 -> PreferenceHolder.putInt(
-                            PreferenceHolder.KEY_LISTTYPE,
+                            PreferenceHolder.KEY_LIST_TYPE,
                             ImageStaggeredAdapter.TYPE_FLOW_3_COL
                         )
                         2 -> PreferenceHolder.putInt(
-                            PreferenceHolder.KEY_LISTTYPE,
+                            PreferenceHolder.KEY_LIST_TYPE,
                             ImageGridAdapter.TYPE_GRID_3_COL
                         )
                     }
@@ -419,7 +422,7 @@ class MainActivity : BaseActivity() {
     companion object {
         private val ID_CONTAINER = R.id.activityMainContent_FrameLayout
 
-        fun syncSubscribe(mainActivity: MainActivity, url: String) {
+        fun syncSubscribe(mainActivity: MainActivity, url: String, success: () -> Unit = {}) {
             if (url.startsWith("http")) {
                 val progress = ProgressDialog.show(
                     mainActivity, "同步中", "请耐心等待...", true, false
@@ -442,6 +445,7 @@ class MainActivity : BaseActivity() {
                         mainActivity.runOnUiThread {
                             mainActivity.drawerRightTreeAdapter!!
                                 .updateDataSet(SiteManager.getSiteMap())
+                            success()
                             ToastUtil.showText("同步成功！")
                         }
                     } catch (e: IOException) {
@@ -457,8 +461,8 @@ class MainActivity : BaseActivity() {
                         IOUtil.copyFile(pack, File(Config.DIR_SITE_PACK, pack.name))
                         SiteManager.loadSites(Config.DIR_SITE_PACK)
                         mainActivity.drawerRightTreeAdapter!!.updateDataSet(SiteManager.getSiteMap())
+                        success()
                         ToastUtil.showText("导入成功！")
-                        mainActivity.openDefaultSite()
                     } catch (e: IOException) {
                         ToastUtil.showText("导入失败: $e")
                     }

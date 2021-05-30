@@ -16,7 +16,7 @@ import com.tsukiseele.moeviewerr.model.Image
 import com.tsukiseele.moeviewerr.libraries.BaseAdapter
 import com.tsukiseele.moeviewerr.libraries.BaseViewHolder
 import com.tsukiseele.moeviewerr.utils.DensityUtil
-import com.tsukiseele.moeviewerr.utils.Util
+import com.tsukiseele.moeviewerr.utils.AndroidUtil
 
 class ImageStaggeredAdapter(
     context: Context,
@@ -47,7 +47,7 @@ class ImageStaggeredAdapter(
             var params = ivCover.layoutParams
             params.height = (DensityUtil.getScreenWidth(context) / column * 1.33).toInt()
             // 导入请求头
-            val glideUrl = Util.buildGlideUrl(url, data.crawler!!.headers)
+            val glideUrl = AndroidUtil.buildGlideUrl(url, data.crawler!!.headers)
 
             // 请求图片
             Glide.with(context)

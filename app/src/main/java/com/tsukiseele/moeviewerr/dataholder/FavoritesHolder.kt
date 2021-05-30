@@ -35,32 +35,32 @@ class FavoritesHolder private constructor(val favorites: MutableMap<String, Muta
         }
 
         fun remove(image: Image) {
-            val logger = File(Config.FILE_LOGGER)
-            logger.appendText("/////////////////// START //////////////////\n")
-            logger.appendText("Image: ${image}\n")
+//            val logger = File(Config.FILE_LOGGER)
+//            logger.appendText("/////////////////// START //////////////////\n")
+//            logger.appendText("Image: ${image}\n")
             image.crawler?.site?.title?.also {
-                logger.appendText("siteName: ${it}\n")
+//                logger.appendText("siteName: ${it}\n")
                 val fav = get().favorites
                 if (fav.containsKey(it)) {
-                    logger.appendText("fav.containsKey: ${fav.containsKey(it)}\n")
+//                    logger.appendText("fav.containsKey: ${fav.containsKey(it)}\n")
                     fav.get(it)?.apply {
                         forEach {
-                            logger.appendText("loop: ${it}\n")
+//                            logger.appendText("loop: ${it}\n")
                             if (it.equals(image)) {
                                 remove(image)
-                                logger.appendText("removed: ${image}\n")
+//                                logger.appendText("removed: ${image}\n")
                                 return@apply
                             }
                         }
-                        logger.appendText("isEmpty?: ${it}\n")
+//                        logger.appendText("isEmpty?: ${it}\n")
                         if (isEmpty()) {
                             fav.remove(it)
-                            logger.appendText("removeEmptyGroup: ${it}\n")
+//                            logger.appendText("removeEmptyGroup: ${it}\n")
                         }
                     }
                 }
             }
-            logger.appendText("/////////////////// END //////////////////\n")
+//            logger.appendText("/////////////////// END //////////////////\n")
         }
 
         fun add(image: Image) {

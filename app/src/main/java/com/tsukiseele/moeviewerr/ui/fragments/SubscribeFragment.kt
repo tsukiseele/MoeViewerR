@@ -16,7 +16,7 @@ import com.tsukiseele.moeviewerr.libraries.BaseAdapter
 import com.tsukiseele.moeviewerr.libraries.BaseViewHolder
 import com.tsukiseele.moeviewerr.model.Subscribe
 import com.tsukiseele.moeviewerr.ui.fragments.abst.BaseMainFragment
-import com.tsukiseele.moeviewerr.utils.Util
+import com.tsukiseele.moeviewerr.utils.AndroidUtil
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_subscribe.*
 import java.util.*
@@ -81,8 +81,8 @@ class SubscribeFragment : BaseMainFragment() {
                     .setTitle(subscribe.name)
                     .setItems(arrayOf("复制订阅名", "复制链接", "修改订阅"), { dialog, which ->
                         when (which) {
-                            0 -> Util.putTextIntoClip(subscribe.name)
-                            1 -> Util.putTextIntoClip(subscribe.url)
+                            0 -> AndroidUtil.putTextIntoClip(subscribe.name)
+                            1 -> AndroidUtil.putTextIntoClip(subscribe.url)
                             2 -> {
                                 showSubscribeDialog("编辑订阅", subscribe.name, subscribe.url, {
                                     SubscribeHolder.get().set(position, it)

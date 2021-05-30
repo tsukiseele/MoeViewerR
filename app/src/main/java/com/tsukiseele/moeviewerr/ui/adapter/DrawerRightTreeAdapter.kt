@@ -19,7 +19,7 @@ import com.tsukiseele.moeviewerr.app.App
 import com.tsukiseele.moeviewerr.model.SiteGroup
 import com.tsukiseele.moeviewerr.interfaces.ExpandableRecyclerViewListener
 import com.tsukiseele.moeviewerr.utils.TextUtil
-import com.tsukiseele.moeviewerr.utils.Util
+import com.tsukiseele.moeviewerr.utils.AndroidUtil
 import com.tsukiseele.sakurawler.Sakurawler
 import com.tsukiseele.sakurawler.model.Site
 
@@ -96,6 +96,8 @@ class DrawerRightTreeAdapter(siteMap: Map<String, MutableList<Site>>) : BaseExpa
         )
     }
 
+
+
     override fun onBindChildViewHolder(
         holder: DrawerRightTreeAdapter.SiteItemVH,
         groupBean: SiteGroup,
@@ -114,7 +116,7 @@ class DrawerRightTreeAdapter(siteMap: Map<String, MutableList<Site>>) : BaseExpa
             holder.ivIcon.setImageResource(R.drawable.ic_image_off)
         } else {
             // 导入请求头
-            val url = Util.buildGlideUrl(iconUrl!!, Sakurawler(site).headers)
+            val url = AndroidUtil.buildGlideUrl(iconUrl!!, Sakurawler(site).headers)
 
             Glide.with(App.context)
                 .load(url)

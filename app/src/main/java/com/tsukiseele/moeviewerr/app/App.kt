@@ -25,15 +25,15 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         init()
-
+        // 初始化应用信息
         initAppInfo()
-
+        // 初始化资源
         initAppResource()
-
-        Config.initAppDirectory()
-
+        // 初始化全局配置
+        Config.init(context)
+        // 加载规则
         SiteManager.reloadSites(Config.DIR_SITE_PACK)
-
+        
         Glide.get(this)
     }
 

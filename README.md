@@ -23,4 +23,7 @@ Android 5.1 (SDK 22) 或更高版本
 - 参见 [LICENSE](./LICENSE)
 
 ## Sample
-![sample_1](./sample/sample_1.jpg){:width="200px"}![sample_2](./sample/sample_2.jpg)![sample_3](./sample/sample_3.jpg)![sample_4](./sample/sample_4.jpg)
+![sample_1](./sample/sample_1.jpg)
+![sample_2](./sample/sample_2.jpg)
+![sample_3](./sample/sample_3.jpg)
+![sample_4](./sample/sample_4.jpg)

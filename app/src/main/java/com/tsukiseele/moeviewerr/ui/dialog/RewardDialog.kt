@@ -34,7 +34,7 @@ class RewardDialog : DialogFragment(), View.OnClickListener {
         viewGroup: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
         mContext = getContext()
 
         val container = LinearLayout(mContext)
@@ -93,7 +93,7 @@ class RewardDialog : DialogFragment(), View.OnClickListener {
         val dm = DisplayMetrics()
         activity!!.windowManager.defaultDisplay.getMetrics(dm)
 
-        val window = dialog.window
+        val window = dialog!!.window
         val width = (dm.widthPixels * 0.85f).toInt()
         val height = window!!.attributes.height
         window.setLayout(width, height)

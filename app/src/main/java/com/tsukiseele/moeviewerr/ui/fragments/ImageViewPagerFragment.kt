@@ -1,6 +1,5 @@
 package com.tsukiseele.moeviewerr.ui.fragments
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -41,10 +40,7 @@ import com.zhy.view.flowlayout.FlowLayout
 import es.dmoral.toasty.Toasty
 import me.shaohui.bottomdialog.BottomDialog
 import okhttp3.Response
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.IOException
-import java.io.InputStream
+import java.io.*
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import java.util.*
@@ -171,17 +167,19 @@ class ImageViewPagerFragment : Fragment() {
                                 }
                                 holder.itemView.setOnClickListener {
                                     val url = urls[key]
-                                    val dataOutPath = File(
-                                        Config.DIR_IMAGE_DOWNLOAD,
-                                        IOUtil.getUrlFileName(url!!)
-                                    )
+                                    val fileName = IOUtil.getUrlFileName(url!!)
+                                    val dataOutPath = File(Config.DIR_IMAGE_SAVE, fileName)
                                     // 存在缓存则直接保存
                                     if (url == getLowUrl() && mBitmapCacheBytes != null) {
                                         try {
                                             dataOutPath.writeBytes(mBitmapCacheBytes!!)
                                             // 通知图库更新
-                                            Util.notifySystemImageUpdate(context, dataOutPath)
-
+//                                            Util.saveImageToPublic(
+//                                                context,
+//                                                IOUtil.getUrlFileName(url!!),
+//                                                ByteArrayInputStream(mBitmapCacheBytes)
+//                                            )
+                                            AndroidUtil.insertSystemGallery(context, dataOutPath)
                                             Toasty.success(context, "保存成功").show()
                                         } catch (e: IOException) {
                                             Toasty.error(context, "保存失败：$e").show()
@@ -200,7 +198,13 @@ class ImageViewPagerFragment : Fragment() {
                                                     }
 
                                                     override fun onSuccessful(task: DownloadTask?) {
-                                                        Util.notifySystemImageUpdate(
+//                                                        if (dataOutPath.exists()) {
+//                                                            Util.saveImageToPublic(
+//                                                                context, fileName,
+//                                                                ByteArrayInputStream(dataOutPath.readBytes())
+//                                                            )
+//                                                        }
+                                                        AndroidUtil.insertSystemGallery(
                                                             context,
                                                             task?.info()?.path
                                                         )
@@ -287,8 +291,8 @@ class ImageViewPagerFragment : Fragment() {
                         ): Boolean {
                             Toasty.success(context!!, "已添加: ${tags[position]}").show()
                             TagHolder.instance
-                                .addTag(Tag(mImage!!.crawler!!.site.title, tags[position]))
-                            TagHolder.instance.saveTags()
+                                .add(Tag(mImage!!.crawler!!.site.title!!, tags[position]))
+                            TagHolder.instance.save()
                             return true
                         }
                     })

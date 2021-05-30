@@ -11,7 +11,7 @@ object PreferenceHolder {
 
     const val FILE_NAME = "preference"
 
-    const val KEY_LISTTYPE = "listType"
+    const val KEY_LIST_TYPE = "listType"
     const val KEY_LASTOPEN_SITE = "lastOpenSite"
     const val KEY_FIRST_START = "firstStart"
 

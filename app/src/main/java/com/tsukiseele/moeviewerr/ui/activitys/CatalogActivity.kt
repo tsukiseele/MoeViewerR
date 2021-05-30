@@ -21,14 +21,14 @@ import com.tsukiseele.moeviewerr.app.Config
 import com.tsukiseele.moeviewerr.dataholder.DownloadHolder
 import com.tsukiseele.moeviewerr.dataholder.GlobalObjectHolder
 import com.tsukiseele.moeviewerr.dataholder.PreferenceHolder
-import com.tsukiseele.moeviewerr.dataholder.PreferenceHolder.KEY_LISTTYPE
+import com.tsukiseele.moeviewerr.dataholder.PreferenceHolder.KEY_LIST_TYPE
 import com.tsukiseele.moeviewerr.model.Image
 import com.tsukiseele.moeviewerr.ui.activitys.abst.BaseFragmentActivity
 import com.tsukiseele.moeviewerr.ui.adapter.ImageGridAdapter.Companion.TYPE_GRID_3_COL
 import com.tsukiseele.moeviewerr.ui.adapter.ImageStaggeredAdapter.Companion.TYPE_FLOW_3_COL
 import com.tsukiseele.moeviewerr.ui.fragments.CatalogFragment
 import com.tsukiseele.moeviewerr.utils.TextUtil
-import com.tsukiseele.moeviewerr.utils.Util
+import com.tsukiseele.moeviewerr.utils.AndroidUtil
 import com.tsukiseele.sakurawler.core.HtmlParser
 import com.tsukiseele.sakurawler.model.Catalog
 import com.tsukiseele.sakurawler.utils.IOUtil
@@ -127,8 +127,10 @@ class CatalogActivity : BaseFragmentActivity(), HtmlParser.CatalogLoadCallback<I
             when (mStatus) {
                 MSG_SUCCESSFUL, MSG_FAILED -> {
                     val images = mCatalogFragment!!.images
-                    val saveDir = File(Config.DIR_IMAGE_DOWNLOAD, mImage!!.title!!)
+                    val saveDir = File(Config.DIR_IMAGE_SAVE, mImage!!.title!!)
+
                     for (image in images!!) {
+
                         image.crawler?.parseOf(Image::class.java)
                             ?.parseExtraAsync(image, object : HtmlParser.ParsedCallback<Image> {
                                 override fun onParsed(data: Image) {
@@ -168,11 +170,11 @@ class CatalogActivity : BaseFragmentActivity(), HtmlParser.CatalogLoadCallback<I
             setNavigationOnClickListener { onBackPressed() }
         }
         mImage?.coverUrl?.let {
-            val url = Util.buildGlideUrl(it, mImage?.crawler?.headers)
+            val url = AndroidUtil.buildGlideUrl(it, mImage?.crawler?.headers)
             Glide.with(this)
                 .load(url)
                 .also {
-                    if (PreferenceHolder.getInt(KEY_LISTTYPE, TYPE_FLOW_3_COL) == TYPE_GRID_3_COL)
+                    if (PreferenceHolder.getInt(KEY_LIST_TYPE, TYPE_FLOW_3_COL) == TYPE_GRID_3_COL)
                         it.centerCrop()
                     else
                         it.fitCenter()
@@ -208,7 +210,7 @@ class CatalogActivity : BaseFragmentActivity(), HtmlParser.CatalogLoadCallback<I
                                     DownloadHolder.instance!!.binder!!.execute(
                                         DownloadTask.Builder(url)
                                             .toFile(
-                                                Config.DIR_IMAGE_DOWNLOAD.toString() + "/" + dirName + "/" + name,
+                                                Config.DIR_IMAGE_SAVE.toString() + "/" + dirName + "/" + name,
                                                 image.title
                                             )
                                             .build()

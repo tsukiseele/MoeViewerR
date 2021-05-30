@@ -19,7 +19,7 @@ import com.tsukiseele.sakurawler.utils.IOUtil
 import es.dmoral.toasty.Toasty
 import java.util.*
 
-
+// 
 class LaunchActivity : BaseActivity() {
     private var launcherImage: ImageView? = null
     private var launcherMessage: TextView? = null
@@ -44,7 +44,7 @@ class LaunchActivity : BaseActivity() {
             try {
                 // 如果收藏夹中有图片，则使用，否则遍历
                 val image = IOUtil.getRandomFile(
-                    Config.DIR_IMAGE_DOWNLOAD,
+                    Config.DIR_IMAGE_SAVE,
                     arrayOf(".jpg", ".png", ".jpeg", ".webp")
                 )
                 if (image != null && image.length() != 0L) {
