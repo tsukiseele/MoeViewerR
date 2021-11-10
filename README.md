@@ -1,4 +1,4 @@
-![sample_1](./sample/ic_launcher-web.png)
+<img src="./sample/ic_launcher-web.png" width="19%" alt="MoeViewerR Icon"/>
 
 # MoeViewerR
 
@@ -23,7 +23,9 @@ Android 5.1 (SDK 22) 或更高版本
 - 参见 [LICENSE](./LICENSE)
 
 ## Sample
-![sample_1](./sample/sample_1.jpg)
-![sample_2](./sample/sample_2.jpg)
-![sample_3](./sample/sample_3.jpg)
-![sample_4](./sample/sample_4.jpg)
+<div align="center">
+  <img src="./sample/sample_1.jpg" alt="sample 1" width="35%"/>
+  <img src="./sample/sample_2.jpg" alt="sample 2" width="35%"/>
+  <img src="./sample/sample_3.jpg" alt="sample 3" width="35%"/>
+  <img src="./sample/sample_4.jpg" alt="sample 4" width="35%"/>
+</div>
