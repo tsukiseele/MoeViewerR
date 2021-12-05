@@ -1,4 +1,4 @@
-<img src="./sample/ic_launcher-web.png" width="19%" alt="MoeViewerR Icon"/>
+<img src="https://cdn.jsdelivr.net/gh/tsukiseele/MoeViewerR/sample/ic_launcher-web.png" width="19%" alt="MoeViewerR Icon"/>
 
 # MoeViewerR
 
@@ -24,8 +24,8 @@
 
 ## Sample
 <div align="center">
-  <img src="./sample/sample_1.jpg" alt="sample 1" width="35%"/>
-  <img src="./sample/sample_2.jpg" alt="sample 2" width="35%"/>
-  <img src="./sample/sample_3.jpg" alt="sample 3" width="35%"/>
-  <img src="./sample/sample_4.jpg" alt="sample 4" width="35%"/>
+  <img src="https://cdn.jsdelivr.net/gh/tsukiseele/MoeViewerR/sample/sample_1.jpg" alt="sample 1" width="35%"/>
+  <img src="https://cdn.jsdelivr.net/gh/tsukiseele/MoeViewerR/sample/sample_2.jpg" alt="sample 2" width="35%"/>
+  <img src="https://cdn.jsdelivr.net/gh/tsukiseele/MoeViewerR/sample/sample_3.jpg" alt="sample 3" width="35%"/>
+  <img src="https://cdn.jsdelivr.net/gh/tsukiseele/MoeViewerR/sample/sample_4.jpg" alt="sample 4" width="35%"/>
 </div>
