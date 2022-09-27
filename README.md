@@ -1,7 +1,10 @@
+
+### 该项目正在使用Flutter重写以支持更多平台，请参见[ComicNyaa](https://github.com/tsukiseele/ComicNyaa).
+### The project is being rewritten using Flutter to support more platforms, see [ComicNyaa](https://github.com/tsukiseele/ComicNyaa).
+
 <img src="https://cdn.jsdelivr.net/gh/tsukiseele/MoeViewerR/sample/ic_launcher-web.png" width="19%" alt="MoeViewerR Icon"/>
 
 # MoeViewerR
-
 插件订阅式的漫画阅读应用，支持Exhentai，以及Yande、Gelbooru、SankakuComplex等主流Booru图库。
 
 该软件通过加载插件运行，具体的内容取决于插件本身，与本软件无关。
